@@ -82,6 +82,10 @@ class SiameseDataset(Dataset):
         self.train_datas = []  # all train dataset
         start = 0
         self.num = 0
+
+        import pdb
+        pdb.set_trace()
+        
         for data_name in cfg.TRAIN.DATASET.WHICH_USE:
             dataset = subData(cfg, data_name, start)
             self.train_datas.append(dataset)
