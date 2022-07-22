@@ -1,0 +1,6 @@
+data/
+pretrain/
+logs/
+snapshot/
+dataset/
+result/
