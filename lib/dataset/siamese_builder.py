@@ -603,6 +603,9 @@ class subData(object):
         """
 
         frame = "{:06d}".format(frame)
+        
+        import pdb
+        pdb.set_trace()
 
         image_path = join(self.root, video, "{}.{}.x.jpg".format(frame, track))
         image_anno = self.labels[video][track][frame]
