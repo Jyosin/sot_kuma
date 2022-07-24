@@ -53,14 +53,14 @@ def gen_json_labels(path="../data/kuma", label_path="./annotations.xml",name="al
     
     all_info = {os.path.join(path, "crop511/train"):{}, os.path.join(path, "crop511/valid"):{}}
     
-    train_video_path = os.path.join(path, "crop511/train")
-    valid_video_path = os.path.join(path, "crop511/valid")
+    train_video_path = os.path.join(path, "crop511/train/")
+    valid_video_path = os.path.join(path, "crop511/valid/")
     
     train_videos = os.listdir(train_video_path)
     # all_info[train_video_path]["KUMA_TRAIN_"+str(idx)] = {"00" : {}}
     for idx_v,t_v in enumerate(train_videos):
-        all_info[train_video_path]["KUMA_TRAIN_"+str(idx_v)] = {}
-        all_info[train_video_path]["KUMA_TRAIN_"+str(idx_v)]["00"] = {}
+        all_info[train_video_path+"KUMA_TRAIN_"+str(idx_v)] = {}
+        all_info[train_video_path+"KUMA_TRAIN_"+str(idx_v)]["00"] = {}
         train_figs = os.listdir(os.path.join(train_video_path, t_v))
         for idx_f in range(len(train_figs)):
             # image_name = "frame_{}.jpg".format(idx_f)
