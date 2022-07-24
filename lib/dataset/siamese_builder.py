@@ -527,6 +527,9 @@ class subData(object):
         self.frame_range = info.RANGE
         self.num_use = info.USE
         self.root = info.PATH
+        
+        import pdb
+        pdb.set_trace()
 
         with open(info.ANNOTATION) as fin:
             self.labels = json.load(fin)
