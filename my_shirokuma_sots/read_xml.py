@@ -93,6 +93,6 @@ if __name__ == "__main__":
     # box = [np.float32(b[index][a]) for a in box_args]
     # draw(image, box)
     
-    make_dataset(videos)
-    # gen_json_labels()
-    # load_json("../data/kuma/all.json")
+    # make_dataset(videos)
+    gen_json_labels()
+    load_json("../data/kuma/all.json")
