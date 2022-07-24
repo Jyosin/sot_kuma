@@ -1,4 +1,3 @@
-
 import os
 import json
 import numpy as np
@@ -79,7 +78,7 @@ def load_json(path):
 if __name__ == "__main__":
     index = [100,200,300,400,110,210,310,410]
     for idx in index:
-        frame_num = "{:06d}".format(index)
+        frame_num = "{:06d}".format(idx)
         image_name = "../data/kuma/crop511/train/KUMA_0/{}.00.x.jpg".format(frame_num)
         image = cv2.imread(image_name)
         b = get_box(path)
