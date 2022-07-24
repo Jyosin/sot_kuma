@@ -71,8 +71,8 @@ TRAIN:
 
   DATASET:
     #WHICH_USE: ['YTB', 'VID', 'COCO', 'DET', 'GOT10K']
-    WHICH_USE: ['GOT10K']
-    # WHICH_USE: ['KUMA']
+    # WHICH_USE: ['GOT10K']
+    WHICH_USE: ['KUMA']
     AUG:
       EXEMPLAR:
         SHIFT: 4
@@ -119,8 +119,8 @@ TRAIN:
       KUMA:
         PATH: "./data/kuma/crop511"
         ANNOTATION: "./data/kuma/all.json"
-        RANGE: 3000
-        USE: -1
+        RANGE: 3200
+        USE: 6000
 
 TEST:    # TEST model is same as TRAIN.MODEL
   ISTRUE: False  # whether to test
