@@ -88,9 +88,6 @@ class SiameseDataset(Dataset):
             self.train_datas.append(dataset)
             start += dataset.num  # real video number
             self.num += dataset.num_use  # the number used for subset shuffle
-
-        import pdb
-        pdb.set_trace()
         
         self._shuffle()
         print(cfg)
@@ -541,8 +538,6 @@ class subData(object):
         remove empty videos/frames/annos in dataset
         """
         
-        import pdb
-        pdb.set_trace()
         # no frames
         to_del = []
         for video in self.labels:
@@ -601,9 +596,6 @@ class subData(object):
         """
         get image and annotation
         """
-        
-        import pdb
-        pdb.set_trace()
 
         frame = "{:06d}".format(frame)
 
