@@ -80,10 +80,6 @@ def load_json(path):
         dict_4_json = json.load(load_f)
     return dict_4_json
 
-    
-        
-
-
 if __name__ == "__main__":
     # index = 301
     # image_name = "./kuma/train/frame_{}.jpg".format(index)

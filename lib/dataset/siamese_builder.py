@@ -532,9 +532,6 @@ class subData(object):
             self.labels = json.load(fin)
             self._clean()
             self.num = len(self.labels)  # video numer
-
-        import pdb
-        pdb.set_trace()
         
         self.num_use = self.num if self.num_use == -1 else self.num_use
         self._shuffle()
