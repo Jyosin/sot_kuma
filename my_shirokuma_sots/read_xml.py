@@ -70,7 +70,7 @@ def gen_json_labels(path="../data/kuma", label_path="./annotations.xml",name="al
             #     return
             label = [box_labels[idx_f][a] for a in box_args]
             frame = "{:06d}".format(idx_f)
-            all_info["./train/KUMA_TRAIN_"+str(idx_v)]["00"][frame] = label
+            all_info["train/KUMA_TRAIN_"+str(idx_v)]["00"][frame] = label
                 
     with open(json_path,"w") as f:
         json.dump(all_info, f)
