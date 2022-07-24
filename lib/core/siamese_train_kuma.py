@@ -49,9 +49,6 @@ def siamese_train(inputs):
         model_inputs = {'template': template, 'search': search, 'cls_label': cls_label, 'reg_label': reg_label,
                         'reg_weight': reg_weight, 'template_bbox': template_bbox, 'search_bbox': search_bbox,
                         'template_mask': template_mask, 'jitterBox': jitterBox, 'jitter_ious': jitter_ious}
-
-        import pdb
-        pdb.set_trace()
         
         model_loss = model(model_inputs)
         cls_loss = torch.mean(model_loss['cls_loss'])
