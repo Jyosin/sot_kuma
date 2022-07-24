@@ -598,6 +598,9 @@ class subData(object):
         """
         get image and annotation
         """
+        
+        import pdb
+        pdb.set_trace()
 
         frame = "{:06d}".format(frame)
 
