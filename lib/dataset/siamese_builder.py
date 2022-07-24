@@ -540,6 +540,9 @@ class subData(object):
         """
         remove empty videos/frames/annos in dataset
         """
+        
+        import pdb
+        pdb.set_trace()
         # no frames
         to_del = []
         for video in self.labels:
