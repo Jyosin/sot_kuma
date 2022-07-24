@@ -83,8 +83,8 @@ class SiameseDataset(Dataset):
         start = 0
         self.num = 0
 
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         
         for data_name in cfg.TRAIN.DATASET.WHICH_USE:
             dataset = subData(cfg, data_name, start)
@@ -119,6 +119,9 @@ class SiameseDataset(Dataset):
         search_image = cv2.imread(search[0])
         template_box = self._toBBox(template_image, template[1])
         search_box = self._toBBox(search_image, search[1])
+        
+        import pdb
+        pdb.set_trace()
 
         template, bbox_t, dag_param_t = self._augmentation(template_image, template_box, self.template_size)
         search, bbox, dag_param = self._augmentation(search_image, search_box, self.search_size, search=True)
@@ -245,7 +248,7 @@ class SiameseDataset(Dataset):
         crop = cv2.warpAffine(image, mapping, (out_sz, out_sz), borderMode=cv2.BORDER_CONSTANT, borderValue=padding)
         return crop
 
-    def _draw(self, image, box, name):
+    def _draw(self, image, box, name="./test.jpg"):
         """
         draw image for debugging
         """
@@ -528,8 +531,8 @@ class subData(object):
         self.num_use = info.USE
         self.root = info.PATH
         
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
 
         with open(info.ANNOTATION) as fin:
             self.labels = json.load(fin)
