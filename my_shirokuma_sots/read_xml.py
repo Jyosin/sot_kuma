@@ -76,7 +76,7 @@ def load_json(path):
     return dict_4_json
 
 if __name__ == "__main__":
-    index = [100,200,300,400,110,210,310,410]
+    index = [10,11,12]
     for idx in index:
         frame_num = "{:06d}".format(idx)
         image_name = "../data/kuma/crop511/train/KUMA_0/{}.00.x.jpg".format(frame_num)
