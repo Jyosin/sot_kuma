@@ -83,7 +83,7 @@ if __name__ == "__main__":
         image = cv2.imread(image_name)
         b = get_box(path)
         box_args = ['xtl','ytl','xbr','ybr']
-        box = [np.float32(b[index][a]) for a in box_args]
+        box = [np.float32(b[idx][a]) for a in box_args]
         draw(image, box,name="./test_{}.jpg".format(idx))
     
     # make_dataset(videos)
