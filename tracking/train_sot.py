@@ -107,7 +107,7 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
         train_set = data_builder(config)
         if not config.TRAIN.DDP.ISTRUE:
             train_loader = DataLoader(train_set, batch_size=config.TRAIN.BATCH * gpu_num, num_workers=config.TRAIN.WORKERS,
-                                      pin_memory=True, sampler=None, drop_last=True)
+                                      pin_memory=True, sampler=None, drop_last=False)
         else:
             sampler = DistributedSampler(train_set, num_replicas=world_size, rank=local_rank, shuffle=True, seed=42)
             
@@ -129,8 +129,8 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
             lr_scheduler.step(epoch)
             curLR = lr_scheduler.get_cur_lr()
         
-        # import pdb
-        # pdb.set_trace()
+        import pdb
+        pdb.set_trace()
 
         inputs = {'data_loader': train_loader, 'model': model, 'optimizer': optimizer, 'device': device,
                   'epoch': epoch + 1, 'cur_lr': curLR, 'config': config,
