@@ -117,7 +117,7 @@ class SiameseDataset(Dataset):
         template_box = self._toBBox(template_image, template[1])
         search_box = self._toBBox(search_image, search[1])
         
-        self._draw(template, bbox_t)
+        self._draw(template, template_box)
         
         import pdb
         pdb.set_trace()
