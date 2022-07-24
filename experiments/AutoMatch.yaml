@@ -120,7 +120,7 @@ TRAIN:
         PATH: "./data/kuma/crop511"
         ANNOTATION: "./data/kuma/all.json"
         RANGE: 1
-        USE: 3000
+        USE: 2
 
 TEST:    # TEST model is same as TRAIN.MODEL
   ISTRUE: False  # whether to test
