@@ -68,7 +68,7 @@ def gen_json_labels(path="../data/kuma", label_path="./annotations.xml",name="al
             # if image_name not in train_figs:
             #     print("No such image {}".format(image_name))
             #     return
-            label = [box_labels[idx_f][a] for a in box_args]
+            label = [int(box_labels[idx_f][a]) for a in box_args]
             frame = "{:06d}".format(idx_f)
             all_info["train/KUMA_"+str(idx_v)]["00"][frame] = label
                 
