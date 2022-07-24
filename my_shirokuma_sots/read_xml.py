@@ -6,7 +6,7 @@ import cv2
 from lxml import etree
 
 path = "./annotations.xml"
-videos = ["./91_2020_09_22_08.mp4","./91_2020_09_22_08.mp4"]
+videos = ["../data/polar/91_2020_09_22_08.mp4","../data/polar/91_2020_09_22_08.mp4"]
 
 def get_box(path):
     boxes = []
@@ -17,17 +17,17 @@ def get_box(path):
     return boxes
 
 def make_dataset(files):
-    os.system("rm -rf ./KUMA")
-    os.system("mkdir -p ./KUMA/crop511/train")
-    os.system("mkdir -p ./KUMA/crop511/valid")
+    os.system("rm -rf ../data/kuma")
+    os.system("mkdir -p ../data/kuma/crop511/train")
+    os.system("mkdir -p ../data/kuma/crop511/valid")
     
     for idx,f in enumerate(files):
         cap_file = cv2.VideoCapture(f)
         success, frame = cap_file.read()
         count = 0
         while success:
-            os.system("mkdir -p ./KUMA/crop511/train/KUMA_{}".format(idx))
-            cv2.imwrite("./KUMA/crop511/train/KUMA_{}/frame_{}.00.x.jpg".format(idx, count), frame)     # save frame as JPEG file
+            os.system("mkdir -p ../data/kuma/crop511/train/KUMA_{}".format(idx))
+            cv2.imwrite("../data/kuma/crop511/train/KUMA_{}/frame_{}.00.x.jpg".format(idx, count), frame)     # save frame as JPEG file
             success, frame = cap_file.read()
             count += 1
         cap_file.release()
@@ -45,7 +45,7 @@ def draw(image, box, name="test.jpg"):
                 (255, 255, 255), 1)
     cv2.imwrite(name, draw_image) 
 
-def gen_json_labels(path="./KUMA", label_path="./annotations.xml",name="all.json"):
+def gen_json_labels(path="../data/kuma", label_path="./annotations.xml",name="all.json"):
     json_path = os.path.join(path, name)
     
     box_labels = get_box(label_path)
@@ -68,7 +68,8 @@ def gen_json_labels(path="./KUMA", label_path="./annotations.xml",name="all.json
             #     print("No such image {}".format(image_name))
             #     return
             label = [box_labels[idx_f][a] for a in box_args]
-            all_info[train_video_path]["KUMA_TRAIN_"+str(idx_v)]["00"][idx_f] = label
+            frame = "{:06d}".format(idx_f)
+            all_info[train_video_path]["KUMA_TRAIN_"+str(idx_v)]["00"][frame] = label
                 
     with open(json_path,"w") as f:
         json.dump(all_info, f)
@@ -93,4 +94,4 @@ if __name__ == "__main__":
     
     # make_dataset(videos)
     gen_json_labels()
-    load_json("./KUMA/all.json")
+    load_json("../data/kuma/all.json")
