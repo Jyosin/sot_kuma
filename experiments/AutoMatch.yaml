@@ -71,8 +71,8 @@ TRAIN:
 
   DATASET:
     #WHICH_USE: ['YTB', 'VID', 'COCO', 'DET', 'GOT10K']
-    # WHICH_USE: ['GOT10K', 'KUMA']
-    WHICH_USE: ['KUMA']
+    WHICH_USE: ['GOT10K']
+    # WHICH_USE: ['KUMA']
     AUG:
       EXEMPLAR:
         SHIFT: 4
