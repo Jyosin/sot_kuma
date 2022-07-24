@@ -27,7 +27,8 @@ def make_dataset(files):
         count = 0
         while success:
             os.system("mkdir -p ../data/kuma/crop511/train/KUMA_{}".format(idx))
-            cv2.imwrite("../data/kuma/crop511/train/KUMA_{}/frame_{}.00.x.jpg".format(idx, count), frame)     # save frame as JPEG file
+            frame_num = "{:06d}".format(count)
+            cv2.imwrite("../data/kuma/crop511/train/KUMA_{}/{}.00.x.jpg".format(idx, frame_num), frame)     # save frame as JPEG file
             success, frame = cap_file.read()
             count += 1
         cap_file.release()
@@ -59,8 +60,8 @@ def gen_json_labels(path="../data/kuma", label_path="./annotations.xml",name="al
     train_videos = os.listdir(train_video_path)
     # all_info[train_video_path]["KUMA_TRAIN_"+str(idx)] = {"00" : {}}
     for idx_v,t_v in enumerate(train_videos):
-        all_info["./train/KUMA_TRAIN_"+str(idx_v)] = {}
-        all_info["./train/KUMA_TRAIN_"+str(idx_v)]["00"] = {}
+        all_info["train/KUMA_TRAIN_"+str(idx_v)] = {}
+        all_info["train/KUMA_TRAIN_"+str(idx_v)]["00"] = {}
         train_figs = os.listdir(os.path.join(train_video_path, t_v))
         for idx_f in range(len(train_figs)):
             # image_name = "frame_{}.jpg".format(idx_f)
@@ -92,6 +93,6 @@ if __name__ == "__main__":
     # box = [np.float32(b[index][a]) for a in box_args]
     # draw(image, box)
     
-    # make_dataset(videos)
-    gen_json_labels()
-    load_json("../data/kuma/all.json")
+    make_dataset(videos)
+    # gen_json_labels()
+    # load_json("../data/kuma/all.json")
