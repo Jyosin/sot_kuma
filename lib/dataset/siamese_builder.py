@@ -82,9 +82,6 @@ class SiameseDataset(Dataset):
         self.train_datas = []  # all train dataset
         start = 0
         self.num = 0
-
-        # import pdb
-        # pdb.set_trace()
         
         for data_name in cfg.TRAIN.DATASET.WHICH_USE:
             dataset = subData(cfg, data_name, start)
@@ -120,9 +117,11 @@ class SiameseDataset(Dataset):
         template_box = self._toBBox(template_image, template[1])
         search_box = self._toBBox(search_image, search[1])
         
+        self._draw(template, bbox_t)
+        
         import pdb
         pdb.set_trace()
-
+        
         template, bbox_t, dag_param_t = self._augmentation(template_image, template_box, self.template_size)
         search, bbox, dag_param = self._augmentation(search_image, search_box, self.search_size, search=True)
 
