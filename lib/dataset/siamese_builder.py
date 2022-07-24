@@ -89,8 +89,8 @@ class SiameseDataset(Dataset):
             start += dataset.num  # real video number
             self.num += dataset.num_use  # the number used for subset shuffle
 
-        # import pdb
-        # pdb.set_trace()
+        import pdb
+        pdb.set_trace()
         
         self._shuffle()
         print(cfg)
@@ -527,9 +527,6 @@ class subData(object):
         self.frame_range = info.RANGE
         self.num_use = info.USE
         self.root = info.PATH
-        
-        # import pdb
-        # pdb.set_trace()
 
         with open(info.ANNOTATION) as fin:
             self.labels = json.load(fin)
@@ -603,9 +600,6 @@ class subData(object):
         """
 
         frame = "{:06d}".format(frame)
-        
-        import pdb
-        pdb.set_trace()
 
         image_path = join(self.root, video, "{}.{}.x.jpg".format(frame, track))
         image_anno = self.labels[video][track][frame]
