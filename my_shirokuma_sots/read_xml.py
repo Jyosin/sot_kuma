@@ -51,7 +51,7 @@ def gen_json_labels(path="../data/kuma", label_path="./annotations.xml",name="al
     box_labels = get_box(label_path)
     box_args = ['xtl','ytl','xbr','ybr']
     
-    all_info = {os.path.join(path, "crop511/train"):{}, os.path.join(path, "crop511/valid"):{}}
+    all_info = {}
     
     train_video_path = os.path.join(path, "crop511/train/")
     valid_video_path = os.path.join(path, "crop511/valid/")
