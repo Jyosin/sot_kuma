@@ -89,6 +89,9 @@ class SiameseDataset(Dataset):
             start += dataset.num  # real video number
             self.num += dataset.num_use  # the number used for subset shuffle
 
+        import pdb
+        pdb.set_trace()
+        
         self._shuffle()
         print(cfg)
 
@@ -116,11 +119,6 @@ class SiameseDataset(Dataset):
         search_image = cv2.imread(search[0])
         template_box = self._toBBox(template_image, template[1])
         search_box = self._toBBox(search_image, search[1])
-        
-        self._draw(template, template_box)
-        
-        import pdb
-        pdb.set_trace()
         
         template, bbox_t, dag_param_t = self._augmentation(template_image, template_box, self.template_size)
         search, bbox, dag_param = self._augmentation(search_image, search_box, self.search_size, search=True)
