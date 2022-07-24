@@ -64,10 +64,6 @@ def gen_json_labels(path="../data/kuma", label_path="./annotations.xml",name="al
         all_info["train/KUMA_"+str(idx_v)]["00"] = {}
         train_figs = os.listdir(os.path.join(train_video_path, t_v))
         for idx_f in range(len(train_figs)):
-            # image_name = "frame_{}.jpg".format(idx_f)
-            # if image_name not in train_figs:
-            #     print("No such image {}".format(image_name))
-            #     return
             label = [int(np.float32(box_labels[idx_f][a])) for a in box_args]
             frame = "{:06d}".format(idx_f)
             all_info["train/KUMA_"+str(idx_v)]["00"][frame] = label
@@ -81,14 +77,16 @@ def load_json(path):
     return dict_4_json
 
 if __name__ == "__main__":
-    # index = 301
-    # image_name = "./kuma/train/frame_{}.jpg".format(index)
-    # image = cv2.imread(image_name)
-    # b = get_box(path)
-    # box_args = ['xtl','ytl','xbr','ybr']
-    # box = [np.float32(b[index][a]) for a in box_args]
-    # draw(image, box)
+    index = [100,200,300,400,110,210,310,410]
+    for idx in index:
+        frame_num = "{:06d}".format(index)
+        image_name = "../data/kuma/crop511/train/KUMA_0/{}.00.x.jpg".format(frame_num)
+        image = cv2.imread(image_name)
+        b = get_box(path)
+        box_args = ['xtl','ytl','xbr','ybr']
+        box = [np.float32(b[index][a]) for a in box_args]
+        draw(image, box,name="test_{}.jpg".format(idx))
     
     # make_dataset(videos)
-    gen_json_labels()
-    load_json("../data/kuma/all.json")
+    # gen_json_labels()
+    # load_json("../data/kuma/all.json")
