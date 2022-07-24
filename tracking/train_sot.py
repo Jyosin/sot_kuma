@@ -129,8 +129,8 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
             lr_scheduler.step(epoch)
             curLR = lr_scheduler.get_cur_lr()
         
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
 
         inputs = {'data_loader': train_loader, 'model': model, 'optimizer': optimizer, 'device': device,
                   'epoch': epoch + 1, 'cur_lr': curLR, 'config': config,
