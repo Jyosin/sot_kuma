@@ -109,7 +109,7 @@ def setup_wandb(config, notes):
             run_id = run_id[:128]
             print('warning: run id truncated for wandb limitation')
 
-    wandb_instance = wandb.init(project="AutoMatch", entity="isdl", tags=tags, config=config, force=True, job_type='train', id=run_id, mode=mode, dir=output_dir, group=group, notes=str(notes))
+    wandb_instance = wandb.init(project="shirokuma", entity="isdl", tags=tags, config=config, force=True, job_type='train', id=run_id, mode=mode, dir=output_dir, group=group, notes=str(notes))
     return wandb_instance
 
 
