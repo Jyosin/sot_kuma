@@ -34,7 +34,7 @@ TRAIN:
   PRETRAIN: 'ltm_nas.model'
   LR_POLICY: 'log'
   PRINT_FREQ: 10
-  WANDB_ONLINE: False  # run wandb online
+  WANDB_ONLINE: True  # run wandb online
   CLS_WEIGHT: 1
   REG_WEIGHT: 1
   CLIP_GRAD: False
