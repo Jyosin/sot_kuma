@@ -173,8 +173,8 @@ class SiamTracker(object):
                 x_crop = tvisf.normalize(x_crop, self.mean, self.std, self.inplace)
             x_crop = x_crop.unsqueeze(0).cuda()
 
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         
         outputs = self.model.track({'search': x_crop})
 
