@@ -48,8 +48,17 @@ class load_sot_benchmark():
             return self.load_NFS()
         elif 'TRACKINGNET' in self.dataset:
             return self.load_TRACKINGNET()
+        elif 'KUMA' in self.dataset:
+            return self.load_KUMA()
         else:
             raise Exception('Not implemented benchmark!')
+        
+    def load_KUMA(self):
+        info = {}
+        json_path = join(realpath(dirname(__file__)), '../../dataset/polar',  "polar" +'.json')
+        videos = json.load(open(json_path,'r'))
+        for video in videos:
+            pass
 
     def load_OTB(self):
         """
@@ -64,7 +73,8 @@ class load_sot_benchmark():
             info[v]['image_files'] = [join(base_path, path_name, 'img', im_f) for im_f in info[v]['image_files']]
             info[v]['gt'] = np.array(info[v]['gt_rect']) - [1, 1, 0, 0]
             info[v]['name'] = v
-
+        import pdb
+        pdb.set_trace()
         return info
 
     def load_VOT(self):

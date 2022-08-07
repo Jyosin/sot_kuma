@@ -126,6 +126,7 @@ TEST:    # TEST model is same as TRAIN.MODEL
   ISTRUE: False  # whether to test
   THREADS: 16   # multi threads test
   DATA: 'OTB2015'
+  # DATA: 'KUMA'
   START_EPOCH: 5
   END_EPOCH: 20
   EPOCH_TEST: True   # use default hyper-parameters
