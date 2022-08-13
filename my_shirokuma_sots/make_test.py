@@ -25,7 +25,7 @@ def make_dataset(files):
         success, frame = cap_file.read()
         count = 0
         while success:
-            frame_num = "{:06d}".format(count)
+            frame_num = count
             cv2.imwrite("../dataset/kuma/test/KUMA_{}/{}.jpg".format(idx, frame_num), frame)     # save frame as JPEG file
             success, frame = cap_file.read()
             count += 1
