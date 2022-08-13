@@ -17,7 +17,7 @@ def draw(image, box, name="test.jpg"):
     cv2.imwrite(name, draw_image) 
 
 def read_result(path='../result/KUMA/', name='AutoMatchcheckpoint_e20/kuma.txt'):
-    result = np.loadtxt(os.path.join(path,name))
+    result = np.loadtxt(os.path.join(path,name), delimiter=',',dtype=np.float32)
     return result
 
 def draw_video(path='../dataset/kuma/'):
