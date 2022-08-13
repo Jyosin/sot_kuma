@@ -26,7 +26,7 @@ def draw_video(path='../dataset/kuma/'):
     pred = read_result()
     for id, fig in enumerate(videos):
         p = [int(ax) for ax in pred[id]]
-        image = cv2.imread(os.join(path,fig)) 
+        image = cv2.imread(os.path.join(path,fig)) 
         draw(image, p, name="./drawout/{}.jpg".format(id))
 
 if __name__ == "__main__":
