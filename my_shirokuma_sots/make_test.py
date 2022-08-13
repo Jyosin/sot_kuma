@@ -71,7 +71,7 @@ if __name__ == "__main__":
     #     box_args = ['xtl','ytl','xbr','ybr']
     #     box = [np.float32(b[idx][a]) for a in box_args]
     #     draw(image, box,name="./test_{}.jpg".format(idx))
-    # make_dataset(videos)
+    make_dataset(videos)
     gen_json_labels()
     # make_dataset(videos)
     # gen_json_labels()
