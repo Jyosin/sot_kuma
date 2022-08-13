@@ -4,6 +4,7 @@ Function: load benchmark dataset for testing
 Data: 2021.6.23
 '''
 
+from cmath import inf
 import os
 import cv2
 import json
@@ -54,14 +55,16 @@ class load_sot_benchmark():
             raise Exception('Not implemented benchmark!')
         
     def load_KUMA(self):
-        import pdb
-        pdb.set_trace()
-        info = {}
+        # import pdb
+        # pdb.set_trace()
+        info = {"kuma":{}}
         json_path = join(realpath(dirname(__file__)), '../../dataset/kuma',  "test" +'.json')
+        dataset_path = join(realpath(dirname(__file__)), '../../dataset/kuma')
         videos = json.load(open(json_path,'r'))
-        for video in videos:
-            pass
-
+        info["kuma"]['image_files'] = [join(dataset_path,p) for p in videos['image_files']]
+        info["kuma"]['gt'] = np.array(videos['gt_rect'])
+        info["kuma"]['init_rect'] = videos['init_rect']
+        info["kuma"]['name'] = "kuma"
     def load_OTB(self):
         """
         OTB: http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html
@@ -75,6 +78,9 @@ class load_sot_benchmark():
             info[v]['image_files'] = [join(base_path, path_name, 'img', im_f) for im_f in info[v]['image_files']]
             info[v]['gt'] = np.array(info[v]['gt_rect']) - [1, 1, 0, 0]
             info[v]['name'] = v
+        import pdb
+        pdb.set_trace()
+        
         return info
 
     def load_VOT(self):
