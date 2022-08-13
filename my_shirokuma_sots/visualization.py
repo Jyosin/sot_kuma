@@ -28,7 +28,8 @@ def draw_video(path='../dataset/kuma/'):
         import pdb
         pdb.set_trace()
         p = [int(ax) for ax in pred[id]]
-        draw(fig,p,name="./drawout/{}.jpg".format(id))
+        image = cv2.imread(os.join(path,fig)) 
+        draw(image, p, name="./drawout/{}.jpg".format(id))
 
 if __name__ == "__main__":
     draw_video()
