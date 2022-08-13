@@ -38,10 +38,7 @@ def gen_json_labels(path="../dataset/kuma", label_path="./annotations.xml", name
     box_labels = get_box(label_path)
     box_args = ['xtl','ytl','xbr','ybr']
     
-    all_info = {"gt_rect":[],"init_rect":[],"image_files":[],"gt":[]}
-    
-    import pdb
-    pdb.set_trace()
+    all_info = {"gt_rect":[],"init_rect":[],"image_files":[]}
 
     test_video_path = os.path.join(path, "test/")
     test_videos = os.listdir(test_video_path)
@@ -55,7 +52,6 @@ def gen_json_labels(path="../dataset/kuma", label_path="./annotations.xml", name
             if idx_f == 0:
                 all_info["init_rect"] = label
             all_info["gt_rect"].append(label)
-    all_info["gt"]=np.array(all_info["gt_rect"])
                 
     with open(json_path,"w") as f:
         json.dump(all_info, f)
