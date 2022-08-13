@@ -40,8 +40,10 @@ def gen_json_labels(path="../dataset/kuma", label_path="./annotations.xml", name
     
     all_info = {"gt_rect":[],"init_rect":[],"image_files":[],"gt":[]}
     
-    test_video_path = os.path.join(path, "test/")
+    import pdb
+    pdb.set_trace()
     
+    test_video_path = os.path.join(path, "test/")
     test_videos = os.listdir(test_video_path)
 
     for idx_v,t_v in enumerate(test_videos):
