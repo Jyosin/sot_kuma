@@ -25,8 +25,6 @@ def draw_video(path='../dataset/kuma/'):
     videos = json.load(open(json_path,'r'))['image_files']
     pred = read_result()
     for id, fig in enumerate(videos):
-        import pdb
-        pdb.set_trace()
         p = [int(ax) for ax in pred[id]]
         image = cv2.imread(os.join(path,fig)) 
         draw(image, p, name="./drawout/{}.jpg".format(id))
