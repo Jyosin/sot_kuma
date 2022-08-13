@@ -44,10 +44,9 @@ def gen_json_labels(path="../dataset/kuma", label_path="./annotations.xml", name
     test_videos = os.listdir(test_video_path)
 
     for idx_v,t_v in enumerate(test_videos):
-        fig_path = os.path.join(test_video_path, t_v)
         test_figs = os.listdir(os.path.join(test_video_path, t_v))
-        all_info['image_files'] += [os.path.join(fig_path,f) for f in test_figs]
         for idx_f in range(len(test_figs)):
+            all_info['image_files'] += ["test/KUMA_{}/{}.jpg".format(idx_v,idx_f)]
             label = [int(np.float32(box_labels[idx_f][a])) for a in box_args]
             if idx_f == 0:
                 all_info["init_rect"] = label
