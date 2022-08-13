@@ -49,7 +49,7 @@ def gen_json_labels(path="../dataset/kuma", label_path="./annotations.xml", name
         all_info += test_figs
         for idx_f in range(len(test_figs)):
             label = [int(np.float32(box_labels[idx_f][a])) for a in box_args]
-            if idx == 0:
+            if idx_f == 0:
                 all_info["init_rect"] = label
             all_info["gt_rect"].append(label)
     all_info["gt"]=np.array(all_info["gt_rect"])
@@ -72,8 +72,8 @@ if __name__ == "__main__":
     #     box_args = ['xtl','ytl','xbr','ybr']
     #     box = [np.float32(b[idx][a]) for a in box_args]
     #     draw(image, box,name="./test_{}.jpg".format(idx))
-    make_dataset(videos)
-    # gen_json_labels()
+    # make_dataset(videos)
+    gen_json_labels()
     # make_dataset(videos)
     # gen_json_labels()
     # load_json("../data/kuma/all.json")S
