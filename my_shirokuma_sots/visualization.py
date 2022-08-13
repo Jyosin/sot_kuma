@@ -1,4 +1,3 @@
-from ast import main
 import cv2
 import os
 import json
