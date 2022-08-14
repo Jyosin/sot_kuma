@@ -73,6 +73,7 @@ def gen_json_labels(path="../data/kuma/", label_paths=["./annotations.xml"], nam
     all_info = {}
     for idx_v, anno in enumerate(box_labels):
         all_info["train/KUMA_"+str(idx_v)] = {}
+        all_info["train/KUMA_"+str(idx_v)]["00"] = {}
         for label in anno[0]:
             import pdb
             pdb.set_trace()
