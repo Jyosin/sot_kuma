@@ -79,20 +79,6 @@ def gen_json_labels(path="../data/kuma/", label_paths=["./annotations.xml"], nam
             frame = "{:06d}".format(label["frame"])
             all_info["train/KUMA_"+str(idx_v)]["00"][frame] = rect
 
-
-    # all_info = {}
-    # train_video_path = os.path.join(path, "crop511/train/")
-    # train_videos = os.listdir(train_video_path)
-
-    # for idx_v,t_v in enumerate(train_videos):
-    #     all_info["train/KUMA_"+str(idx_v)] = {}
-    #     all_info["train/KUMA_"+str(idx_v)]["00"] = {}
-    #     train_figs = os.listdir(os.path.join(train_video_path, t_v))
-    #     for idx_f in range(len(train_figs)):
-    #         label = [int(a) for a in box_labels[idx_v][idx_f]]
-    #         frame = "{:06d}".format(idx_f)
-    #         all_info["train/KUMA_"+str(idx_v)]["00"][frame] = label
-
     with open(json_path,"w") as f:
         json.dump(all_info, f)
 

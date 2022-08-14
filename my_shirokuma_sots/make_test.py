@@ -30,7 +30,24 @@ def make_dataset(files):
             success, frame = cap_file.read()
             count += 1
         cap_file.release()
+
     print("Test images set build finished!")
+    
+def gen_json_labels(path="../data/kuma/", label_paths=["./annotations.xml"], name="all.json"):
+    json_path = os.path.join(path, name)
+    box_labels = [get_box(p, mode="json") for p in label_paths]
+    
+    all_info = {}
+    for idx_v, anno in enumerate(box_labels):
+        all_info["train/KUMA_"+str(idx_v)] = {}
+        all_info["train/KUMA_"+str(idx_v)]["00"] = {}
+        for label in anno[0]:
+            rect = [int(pos) for pos in label["points"]]
+            frame = "{:06d}".format(label["frame"])
+            all_info["train/KUMA_"+str(idx_v)]["00"][frame] = rect
+
+    with open(json_path,"w") as f:
+        json.dump(all_info, f)
 
 def gen_json_labels(path="../dataset/kuma", label_path="./annotations.xml", name="test.json"):
     json_path = os.path.join(path, name)
