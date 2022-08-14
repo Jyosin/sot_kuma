@@ -87,8 +87,7 @@ class SiameseDataset(Dataset):
             self.train_datas.append(dataset)
             start += dataset.num  # real video number
             self.num += dataset.num_use  # the number used for subset shuffle
-        import pdb
-        pdb.set_trace()
+        
         self._shuffle()
         print(cfg)
 
