@@ -4,8 +4,6 @@ import numpy as np
 import cv2
 from lxml import etree
 
-from ..tracking.test_sot import track
-
 def load_json(path):
     with open(path,'r') as load_f:
         dict_4_json = json.load(load_f)
