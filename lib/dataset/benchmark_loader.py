@@ -81,8 +81,8 @@ class load_sot_benchmark():
             info[v]['image_files'] = [join(base_path, path_name, 'img', im_f) for im_f in info[v]['image_files']]
             info[v]['gt'] = np.array(info[v]['gt_rect']) - [1, 1, 0, 0]
             info[v]['name'] = v
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         
         return info
 
