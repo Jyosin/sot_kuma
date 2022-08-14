@@ -75,8 +75,6 @@ def gen_json_labels(path="../data/kuma/", label_paths=["./annotations.xml"], nam
         all_info["train/KUMA_"+str(idx_v)] = {}
         all_info["train/KUMA_"+str(idx_v)]["00"] = {}
         for label in anno[0]:
-            import pdb
-            pdb.set_trace()
             rect = [int(pos) for pos in label["points"]]
             frame = "{:06d}".format(label["frame"])
             all_info["train/KUMA_"+str(idx_v)]["00"][frame] = rect
@@ -94,9 +92,6 @@ def gen_json_labels(path="../data/kuma/", label_paths=["./annotations.xml"], nam
     #         label = [int(a) for a in box_labels[idx_v][idx_f]]
     #         frame = "{:06d}".format(idx_f)
     #         all_info["train/KUMA_"+str(idx_v)]["00"][frame] = label
-    
-    import pdb
-    pdb.set_trace()
 
     with open(json_path,"w") as f:
         json.dump(all_info, f)
