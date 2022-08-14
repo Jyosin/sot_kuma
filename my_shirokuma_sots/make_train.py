@@ -66,16 +66,14 @@ def draw(image, box, name="test.jpg"):
                 (255, 255, 255), 1)
     cv2.imwrite(name, draw_image) 
 
-def gen_json_labels(path="./kuma/", label_path="./annotations.xml",name="all.json"):
+def gen_json_labels(path="./kuma/", label_paths=["./annotations.xml"], name="all.json"):
     json_path = os.path.join(path, name)
     
-    box_labels = get_box(label_path, mode="json")
-    box_args = ['xtl','ytl','xbr','ybr']
+    box_labels = [get_box(p, mode="json") for p in label_paths]
     
     all_info = {}
     
     train_video_path = os.path.join(path, "crop511/train/")
-    valid_video_path = os.path.join(path, "crop511/valid/")
     
     train_videos = os.listdir(train_video_path)
     # all_info[train_video_path]["KUMA_TRAIN_"+str(idx)] = {"00" : {}}
@@ -84,16 +82,19 @@ def gen_json_labels(path="./kuma/", label_path="./annotations.xml",name="all.jso
         all_info["train/KUMA_"+str(idx_v)]["00"] = {}
         train_figs = os.listdir(os.path.join(train_video_path, t_v))
         for idx_f in range(len(train_figs)):
-            label = [int(np.float32(box_labels[idx_f][a])) for a in box_args]
+            label = [int(a) for a in box_labels[idx_v][idx_f]]
             frame = "{:06d}".format(idx_f)
             all_info["train/KUMA_"+str(idx_v)]["00"][frame] = label
-                
+    
+    import pdb
+    pdb.set_trace()
+    
     with open(json_path,"w") as f:
         json.dump(all_info, f)
 
 if __name__ == "__main__":
     
     videos,annos = find_data_path()
-    make_dataset(videos)
-    # gen_json_labels()
+    # make_dataset(videos)
+    gen_json_labels(path="./kuma", label_paths=annos)
     # load_json("../data/kuma/all.json")
