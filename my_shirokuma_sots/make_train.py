@@ -4,17 +4,15 @@ import numpy as np
 import cv2
 from lxml import etree
 
-path = "./annotations.xml"
-videos = ["../data/polar/91_2020_09_22_08.mp4","../data/polar/91_2020_09_22_08.mp4"]
 
 def find_data_path(path="./kuma"):
     videos = []
     annos = []
     for f in os.walk(path):
         for fname in f[2]:
-            if fname[-4]==".mp4":
+            if fname[-4:]==".mp4":
                 videos.append(os.path.join(f[0],fname))
-            elif fname == "":
+            elif fname == "annotations.xml":
                 annos.append(os.path.join(f[0],fname))
     print(videos, annos)
     return videos, annos
