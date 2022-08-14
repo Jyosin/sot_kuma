@@ -66,17 +66,14 @@ def draw(image, box, name="test.jpg"):
                 (255, 255, 255), 1)
     cv2.imwrite(name, draw_image) 
 
-def gen_json_labels(path="./kuma/", label_paths=["./annotations.xml"], name="all.json"):
+def gen_json_labels(path="../data/kuma/", label_paths=["./annotations.xml"], name="all.json"):
     json_path = os.path.join(path, name)
-    
     box_labels = [get_box(p, mode="json") for p in label_paths]
     
     all_info = {}
-    
     train_video_path = os.path.join(path, "crop511/train/")
-    
     train_videos = os.listdir(train_video_path)
-    # all_info[train_video_path]["KUMA_TRAIN_"+str(idx)] = {"00" : {}}
+    
     for idx_v,t_v in enumerate(train_videos):
         all_info["train/KUMA_"+str(idx_v)] = {}
         all_info["train/KUMA_"+str(idx_v)]["00"] = {}
@@ -88,7 +85,7 @@ def gen_json_labels(path="./kuma/", label_paths=["./annotations.xml"], name="all
     
     import pdb
     pdb.set_trace()
-    
+
     with open(json_path,"w") as f:
         json.dump(all_info, f)
 
