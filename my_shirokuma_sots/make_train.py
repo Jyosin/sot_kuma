@@ -4,6 +4,12 @@ import numpy as np
 import cv2
 from lxml import etree
 
+from ..tracking.test_sot import track
+
+def load_json(path):
+    with open(path,'r') as load_f:
+        dict_4_json = json.load(load_f)
+    return dict_4_json
 
 def find_data_path(path="./kuma"):
     videos = []
@@ -12,18 +18,24 @@ def find_data_path(path="./kuma"):
         for fname in f[2]:
             if fname[-4:]==".mp4":
                 videos.append(os.path.join(f[0],fname))
-            elif fname == "annotations.xml":
+            elif fname == "annotations.json":
                 annos.append(os.path.join(f[0],fname))
     print(videos, annos)
     return videos, annos
 
 
-def get_box(path):
+def get_box(path, mode="xml"):
     boxes = []
-    root = etree.parse(path).getroot()
-    for e in root.iter():
-        if e.tag == 'box':
-            boxes.append(e.attrib)
+    if mode == "xml":
+        root = etree.parse(path).getroot()
+        for e in root.iter():
+            if e.tag == 'box':
+                boxes.append(e.attrib)
+    elif mode == "json":
+        anno = load_json(path=path)
+        tracks = anno[0]['tracks'][0]
+        boxes.append(tracks["points"])
+
     return boxes
 
 def make_dataset(files):
@@ -59,7 +71,7 @@ def draw(image, box, name="test.jpg"):
 def gen_json_labels(path="./kuma/", label_path="./annotations.xml",name="all.json"):
     json_path = os.path.join(path, name)
     
-    box_labels = get_box(label_path)
+    box_labels = get_box(label_path, mode="json")
     box_args = ['xtl','ytl','xbr','ybr']
     
     all_info = {}
@@ -81,15 +93,9 @@ def gen_json_labels(path="./kuma/", label_path="./annotations.xml",name="all.jso
     with open(json_path,"w") as f:
         json.dump(all_info, f)
 
-def load_json(path):
-    with open(path,'r') as load_f:
-        dict_4_json = json.load(load_f)
-    return dict_4_json
-
 if __name__ == "__main__":
     
-    
-    # make_dataset(videos)
+    videos,annos = find_data_path()
+    make_dataset(videos)
     # gen_json_labels()
     # load_json("../data/kuma/all.json")
-    find_data_path()
