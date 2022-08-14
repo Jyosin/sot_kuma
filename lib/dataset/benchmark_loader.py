@@ -66,8 +66,8 @@ class load_sot_benchmark():
         info["kuma"]['gt_rect'] = videos['gt_rect']
         info["kuma"]['init_rect'] = videos['init_rect']
         info["kuma"]['name'] = "kuma"
-
         return info
+
     def load_OTB(self):
         """
         OTB: http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html

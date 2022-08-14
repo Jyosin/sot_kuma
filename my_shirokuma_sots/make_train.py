@@ -76,16 +76,16 @@ def load_json(path):
     return dict_4_json
 
 if __name__ == "__main__":
-    index = [1791,1891,1991,2001,2011,2021,2031]
-    for idx in index:
-        frame_num = "{:06d}".format(idx)
-        image_name = "../data/kuma/crop511/train/KUMA_0/{}.00.x.jpg".format(frame_num)
-        image = cv2.imread(image_name)
-        b = get_box(path)
-        box_args = ['xtl','ytl','xbr','ybr']
-        box = [np.float32(b[idx][a]) for a in box_args]
-        draw(image, box,name="./test_{}.jpg".format(idx))
+    # index = [1791,1891,1991,2001,2011,2021,2031]
+    # for idx in index:
+    #     frame_num = "{:06d}".format(idx)
+    #     image_name = "../data/kuma/crop511/train/KUMA_0/{}.00.x.jpg".format(frame_num)
+    #     image = cv2.imread(image_name)
+    #     b = get_box(path)
+    #     box_args = ['xtl','ytl','xbr','ybr']
+    #     box = [np.float32(b[idx][a]) for a in box_args]
+    #     draw(image, box,name="./test_{}.jpg".format(idx))
     
     # make_dataset(videos)
     # gen_json_labels()
-    # load_json("../data/kuma/all.json")S
+    load_json("../data/kuma/all.json")
