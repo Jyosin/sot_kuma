@@ -32,9 +32,7 @@ def get_box(path, mode="xml"):
     elif mode == "json":
         anno = load_json(path=path)
         tracks = anno[0]['tracks'][0]
-        import pdb
-        pdb.set_trace()
-        boxes.append(tracks["points"])
+        boxes.append(tracks["shapes"])
 
     return boxes
 
@@ -73,17 +71,26 @@ def gen_json_labels(path="../data/kuma/", label_paths=["./annotations.xml"], nam
     box_labels = [get_box(p, mode="json") for p in label_paths]
     
     all_info = {}
-    train_video_path = os.path.join(path, "crop511/train/")
-    train_videos = os.listdir(train_video_path)
-
-    for idx_v,t_v in enumerate(train_videos):
+    for idx_v,anno in enumerate(box_labels):
         all_info["train/KUMA_"+str(idx_v)] = {}
-        all_info["train/KUMA_"+str(idx_v)]["00"] = {}
-        train_figs = os.listdir(os.path.join(train_video_path, t_v))
-        for idx_f in range(len(train_figs)):
-            label = [int(a) for a in box_labels[idx_v][idx_f]]
-            frame = "{:06d}".format(idx_f)
-            all_info["train/KUMA_"+str(idx_v)]["00"][frame] = label
+        for label in anno:
+            rect = [int(pos) for pos in label["points"]]
+            frame = "{:06d}".format(label["frame"])
+            all_info["train/KUMA_"+str(idx_v)]["00"][frame] = rect
+
+
+    # all_info = {}
+    # train_video_path = os.path.join(path, "crop511/train/")
+    # train_videos = os.listdir(train_video_path)
+
+    # for idx_v,t_v in enumerate(train_videos):
+    #     all_info["train/KUMA_"+str(idx_v)] = {}
+    #     all_info["train/KUMA_"+str(idx_v)]["00"] = {}
+    #     train_figs = os.listdir(os.path.join(train_video_path, t_v))
+    #     for idx_f in range(len(train_figs)):
+    #         label = [int(a) for a in box_labels[idx_v][idx_f]]
+    #         frame = "{:06d}".format(idx_f)
+    #         all_info["train/KUMA_"+str(idx_v)]["00"][frame] = label
     
     import pdb
     pdb.set_trace()
