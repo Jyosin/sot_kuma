@@ -25,7 +25,7 @@ TRAIN:
   ISTRUE: True  # whether to test
   WORKERS: 4
   START_EPOCH: 0
-  END_EPOCH: 20
+  END_EPOCH: 100
   TEMPLATE_SIZE: 127
   SEARCH_SIZE: 255
   BATCH: 32   # batch for each GPU
