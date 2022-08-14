@@ -7,6 +7,19 @@ from lxml import etree
 path = "./annotations.xml"
 videos = ["../data/polar/91_2020_09_22_08.mp4","../data/polar/91_2020_09_22_08.mp4"]
 
+def find_data_path(path="./kuma"):
+    videos = []
+    annos = []
+    for f in os.walk(path):
+        for fname in f[2]:
+            if fname[-4]==".mp4":
+                videos.append(os.path.join(f[0],fname))
+            elif fname == "":
+                annos.append(os.path.join(f[0],fname))
+    print(videos, annos)
+    return videos, annos
+
+
 def get_box(path):
     boxes = []
     root = etree.parse(path).getroot()
@@ -45,7 +58,7 @@ def draw(image, box, name="test.jpg"):
                 (255, 255, 255), 1)
     cv2.imwrite(name, draw_image) 
 
-def gen_json_labels(path="../data/kuma", label_path="./annotations.xml",name="all.json"):
+def gen_json_labels(path="./kuma/", label_path="./annotations.xml",name="all.json"):
     json_path = os.path.join(path, name)
     
     box_labels = get_box(label_path)
@@ -76,16 +89,9 @@ def load_json(path):
     return dict_4_json
 
 if __name__ == "__main__":
-    # index = [1791,1891,1991,2001,2011,2021,2031]
-    # for idx in index:
-    #     frame_num = "{:06d}".format(idx)
-    #     image_name = "../data/kuma/crop511/train/KUMA_0/{}.00.x.jpg".format(frame_num)
-    #     image = cv2.imread(image_name)
-    #     b = get_box(path)
-    #     box_args = ['xtl','ytl','xbr','ybr']
-    #     box = [np.float32(b[idx][a]) for a in box_args]
-    #     draw(image, box,name="./test_{}.jpg".format(idx))
+    
     
     # make_dataset(videos)
     # gen_json_labels()
-    load_json("../data/kuma/all.json")
+    # load_json("../data/kuma/all.json")
+    find_data_path()
