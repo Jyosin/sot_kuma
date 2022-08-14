@@ -100,5 +100,5 @@ if __name__ == "__main__":
     
     videos,annos = find_data_path()
     # make_dataset(videos)
-    gen_json_labels(path="./kuma", label_paths=annos)
+    gen_json_labels(path="../data/kuma/", label_paths=annos)
     # load_json("../data/kuma/all.json")
