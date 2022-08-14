@@ -32,6 +32,8 @@ def get_box(path, mode="xml"):
     elif mode == "json":
         anno = load_json(path=path)
         tracks = anno[0]['tracks'][0]
+        import pdb
+        pdb.set_trace()
         boxes.append(tracks["points"])
 
     return boxes
@@ -73,7 +75,7 @@ def gen_json_labels(path="../data/kuma/", label_paths=["./annotations.xml"], nam
     all_info = {}
     train_video_path = os.path.join(path, "crop511/train/")
     train_videos = os.listdir(train_video_path)
-    
+
     for idx_v,t_v in enumerate(train_videos):
         all_info["train/KUMA_"+str(idx_v)] = {}
         all_info["train/KUMA_"+str(idx_v)]["00"] = {}
