@@ -123,6 +123,10 @@ class SiamInference(nn.Module):
             cls_preds, reg_preds = self.head(head_inputs)
             self.cls_preds = cls_preds
             self.reg_preds = reg_preds
+
+            import pdb
+            pdb.set_trace()
+            
         elif self.cfg.MODEL.NAME in ['TransInMo']:
             preds = self.head(fused_zx)
         else:
