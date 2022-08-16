@@ -302,7 +302,8 @@ class L2Mclassification(nn.Module):
         # use Conv3 in classification
         ts4, ts3 = target
         xfs3 = self.LTM(xfs3, zfs3, ts3, mask)
-
+        import pdb
+        pdb.set_trace()
         if self.training:
             outputs = self.roi_cls(pred_box, xf, xfs3, ts4, ts3, cls_label=cls_label, jitterBox=jitterBox)
             return outputs
