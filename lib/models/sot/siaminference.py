@@ -121,9 +121,8 @@ class SiamInference(nn.Module):
                            'jitterBox': inputs['jitterBox'], 'cls_label': inputs['cls_label']
                            }
             cls_preds, reg_preds = self.head(head_inputs)
-            import pdb
-            pdb.set_trace()
-            self.last_predict = (cls_preds, reg_preds)
+            self.cls_preds = cls_preds
+            self.reg_preds = reg_preds
         elif self.cfg.MODEL.NAME in ['TransInMo']:
             preds = self.head(fused_zx)
         else:
