@@ -20,6 +20,7 @@ class SiamInference(nn.Module):
         self.init_arch(archs)
         self.init_hyper()
         self.init_loss()
+        self.last_predict = None
 
 
     def init_arch(self, inputs):
@@ -119,8 +120,8 @@ class SiamInference(nn.Module):
                           'template_mask': inputs['template_mask'], 'target_box': inputs['template_bbox'],
                            'jitterBox': inputs['jitterBox'], 'cls_label': inputs['cls_label']
                            }
-
             cls_preds, reg_preds = self.head(head_inputs)
+            self.last_predict = (cls_preds, reg_preds)
         elif self.cfg.MODEL.NAME in ['TransInMo']:
             preds = self.head(fused_zx)
         else:
