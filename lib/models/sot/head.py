@@ -83,7 +83,8 @@ class Learn2Match(nn.Module):
         reg_outputs = self.regression(xf=xfs4, zf=zfs4, zfs3=zfs3, mask=template_mask, target_box=target_box)
         
         pred_box, target = self.pred_to_image(reg_outputs['reg_score']), [reg_outputs['zf_conv4'], reg_outputs['zf_conv3']]
-
+        self.pred_box = pred_box
+        self.target = target
         if self.training:
             cls_label, jitterBox = inputs['cls_label'], inputs['jitterBox']
         else:
