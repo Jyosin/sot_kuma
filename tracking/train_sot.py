@@ -141,6 +141,9 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
         elif dist.get_rank() == 0:
             loader.save_model(model, epoch, optimizer, config.MODEL.NAME, config, isbest=False)
         
+        import pdb
+        pdb.set_trace()
+        
 
     writer_dict['writer'].close()
 
