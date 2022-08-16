@@ -225,9 +225,6 @@ class L2Mregression(nn.Module):
 
         self.bbox_pred = nn.Conv2d(outchannels, 4, kernel_size=3, stride=1, padding=1)
 
-        import pdb
-        pdb.set_trace
-
         # adjust scale
         self.adjust = nn.Parameter(0.1 * torch.ones(1))
         self.bias = nn.Parameter(torch.Tensor(1.0 * torch.ones(1, 4, 1, 1)).cuda())
@@ -251,6 +248,8 @@ class L2Mregression(nn.Module):
 
         # bounding box prediction
         x_reg = self.bbox_tower(xf_ltm)
+        import pdb
+        pdb.set_trace
         x = self.adjust * self.bbox_pred(x_reg) + self.bias
         x = torch.exp(x)
         if self.training:
