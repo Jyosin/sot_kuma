@@ -85,8 +85,8 @@ class Learn2Match(nn.Module):
         pred_box, target = self.pred_to_image(reg_outputs['reg_score']), [reg_outputs['zf_conv4'], reg_outputs['zf_conv3']]
         self.pred_box = pred_box
         self.target = target
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         if self.training:
             cls_label, jitterBox = inputs['cls_label'], inputs['jitterBox']
         else:

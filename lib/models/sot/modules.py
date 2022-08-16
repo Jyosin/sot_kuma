@@ -249,7 +249,7 @@ class L2Mregression(nn.Module):
         # bounding box prediction
         x_reg = self.bbox_tower(xf_ltm)
         import pdb
-        pdb.set_trace()
+        #pdb.set_trace()
         x = self.adjust * self.bbox_pred(x_reg) + self.bias
         x = torch.exp(x)
         if self.training:
@@ -303,7 +303,7 @@ class L2Mclassification(nn.Module):
         ts4, ts3 = target
         xfs3 = self.LTM(xfs3, zfs3, ts3, mask)
         import pdb
-        pdb.set_trace()
+        #pdb.set_trace()
         if self.training:
             outputs = self.roi_cls(pred_box, xf, xfs3, ts4, ts3, cls_label=cls_label, jitterBox=jitterBox)
             return outputs

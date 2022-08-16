@@ -142,7 +142,7 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
             loader.save_model(model, epoch, optimizer, config.MODEL.NAME, config, isbest=False)
         
         import pdb
-        pdb.set_trace()
+        #pdb.set_trace()
         
 
     writer_dict['writer'].close()

@@ -62,7 +62,7 @@ class load_sot_benchmark():
         dataset_path = join(realpath(dirname(__file__)), '../../dataset/kuma')
         videos = json.load(open(json_path,'r'))
         info["kuma"]['image_files'] = [join(dataset_path,p) for p in videos['image_files']]
-        info["kuma"]['gt'] = np.array(videos['gt_rect'])
+        info["kuma"]['gt'] = np.array(videos['gt_rect'])  - [1, 1, 0, 0]
         info["kuma"]['gt_rect'] = videos['gt_rect']
         info["kuma"]['init_rect'] = videos['init_rect']
         info["kuma"]['name'] = "kuma"
