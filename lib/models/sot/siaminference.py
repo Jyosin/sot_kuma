@@ -124,7 +124,7 @@ class SiamInference(nn.Module):
             # self.cls_preds = cls_preds
             # self.reg_preds = reg_preds
 
-            import pdb
+            #import pdb
             #pdb.set_trace()
 
         elif self.cfg.MODEL.NAME in ['TransInMo']:
