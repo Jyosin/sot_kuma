@@ -249,7 +249,7 @@ class L2Mregression(nn.Module):
         # bounding box prediction
         x_reg = self.bbox_tower(xf_ltm)
         import pdb
-        pdb.set_trace
+        pdb.set_trace()
         x = self.adjust * self.bbox_pred(x_reg) + self.bias
         x = torch.exp(x)
         if self.training:
