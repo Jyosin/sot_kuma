@@ -20,7 +20,7 @@ class SiamInference(nn.Module):
         self.init_arch(archs)
         self.init_hyper()
         self.init_loss()
-        self.last_predict = None
+        # self.last_predict = None
 
 
     def init_arch(self, inputs):
