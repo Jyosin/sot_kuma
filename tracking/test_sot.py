@@ -141,6 +141,7 @@ def main():
 
 
     for video in video_keys:
+        print(video)
         inputs = {'tracker': siam_tracker, 'network': siam_net, 'video_info': dataset[video], 'args': args, 'config': config}
         track(inputs)
 
