@@ -38,8 +38,8 @@ def parse_args():
 
 def track(inputs):
     
-    # import pdb
-    # pdb.set_trace()
+    import pdb
+    pdb.set_trace()
     
     siam_tracker, siam_net, video_info, args, config = inputs['tracker'], inputs['network'], inputs['video_info'], \
                                                inputs['args'], inputs['config']
