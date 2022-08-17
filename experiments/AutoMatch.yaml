@@ -192,6 +192,12 @@ TEST:    # TEST model is same as TRAIN.MODEL
       window_influence: 0.34
       small_sz: 255
       big_sz: 255
+    KUMA:
+      penalty_k: 0.143
+      lr: 0.803
+      window_influence: 0.5
+      small_sz: 255
+      big_sz: 255
 
 TUNE:    # TUNE model is same as TRAIN.MODEL
   ISTRUE: False  # whether to tune

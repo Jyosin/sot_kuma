@@ -106,6 +106,9 @@ def main():
     else:
         raise Exception('Please set the config file for tracking test!')
     
+    import pdb
+    pdb.set_trace()
+    
     # prepare video
     if args.dataset is None:
         dataset_loader = datafactory(config.TEST.DATA)
@@ -141,7 +144,6 @@ def main():
 
 
     for video in video_keys:
-        print(video)
         inputs = {'tracker': siam_tracker, 'network': siam_net, 'video_info': dataset[video], 'args': args, 'config': config}
         track(inputs)
 
