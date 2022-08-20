@@ -234,7 +234,7 @@ class SiamInference(nn.Module):
         """
         import pdb
         pdb.set_trace()
-        
+
         search = inputs['search']
         if self.cfg.MODEL.NAME in ['TransInMo']:
             if not isinstance(search, NestedTensor):
@@ -289,6 +289,9 @@ class SiamInference(nn.Module):
 
         if 'reg' not in preds.keys():
             preds['reg'] = None
+
+        import pdb
+        pdb.set_trace()
 
         return preds
 
