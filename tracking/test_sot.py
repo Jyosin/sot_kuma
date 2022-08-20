@@ -102,8 +102,8 @@ def main():
     else:
         raise Exception('Please set the config file for tracking test!')
     
-    import pdb
-    pdb.set_trace()
+    # import pdb
+    # pdb.set_trace()
     
     # prepare video
     if args.dataset is None:
