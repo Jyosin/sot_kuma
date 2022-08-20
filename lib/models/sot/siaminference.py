@@ -262,7 +262,7 @@ class SiamInference(nn.Module):
                 xfs4, xfs3 = self.neck(xf_conv4, xf_conv3)
                 head_inputs = {'xf_conv4': xfs4, 'xf_conv3': xfs3, 'zf_conv4': self.zfs4, 'zf_conv3': self.zfs3, \
                                 'template_mask': self.template_mask, 'target_box': self.target_box, }
-
+                pdb.set_trace()
                 cls_preds, reg_preds = self.head(head_inputs)
                 preds = {
                     'cls_s1': cls_preds['cls_score_s1'],
@@ -290,7 +290,6 @@ class SiamInference(nn.Module):
         if 'reg' not in preds.keys():
             preds['reg'] = None
 
-        import pdb
         pdb.set_trace()
 
         return preds
