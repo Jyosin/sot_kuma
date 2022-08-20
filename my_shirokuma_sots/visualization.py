@@ -20,8 +20,8 @@ def read_result(path='../result/KUMA/', name='AutoMatchcheckpoint_e20/kuma.txt')
     result = np.loadtxt(os.path.join(path,name), delimiter=',',dtype=np.float32)
     return result
 
-def draw_video(path='../dataset/kuma/'):
-    json_path = os.path.join(path,'test.json')
+def draw_video(path='../dataset/kuma/', json_name="test.json"):
+    json_path = os.path.join(path, json_name)
     videos = json.load(open(json_path,'r'))['image_files']
     pred = read_result()
     for id, fig in enumerate(videos):

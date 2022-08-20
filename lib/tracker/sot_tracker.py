@@ -131,6 +131,9 @@ class SiamTracker(object):
 
 
     def track(self, im, gt=None):
+        import pdb
+        pdb.set_trace()
+        
         if self.config.MODEL.NAME in ['SiamFC', 'SiamDW']:
             scaled_instance = self.p.s_x * self.p.scales
             scaled_target = [[self.target_sz[0] * self.p.scales], [self.target_sz[1] * self.p.scales]]
