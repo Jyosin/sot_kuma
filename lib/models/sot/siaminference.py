@@ -232,7 +232,9 @@ class SiamInference(nn.Module):
         inputs:
          - search: BCHW, H*W:255*255
         """
-
+        import pdb
+        pdb.set_trace()
+        
         search = inputs['search']
         if self.cfg.MODEL.NAME in ['TransInMo']:
             if not isinstance(search, NestedTensor):
