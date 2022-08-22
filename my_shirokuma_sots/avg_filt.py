@@ -14,6 +14,8 @@ def cal_avg(path, videos, win_size=20):
     for id, fig in enumerate(videos):
         image = cv2.imread(os.path.join(path,fig)) 
         win.append(image)
+    import pdb
+    pdb.set_trace()
     avg = np.average(win)
     return avg
 
