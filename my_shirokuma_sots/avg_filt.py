@@ -27,4 +27,4 @@ def draw_video(path='../dataset/kuma/', json_name="test.json"):
         draw(image, avg, name="test_{}.jpg".format(id))
         
 if __name__ == "__main__":
-    draw_video
+    draw_video()
