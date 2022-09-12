@@ -49,32 +49,20 @@ def parse_args():
 def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
     # create model
     print('====> build model <====')
-    if 'Siam' in config.MODEL.NAME or config.MODEL.NAME in ['Ocean', 'OceanPlus', 'AutoMatch', 'TransT', 'CNNInMo', 'TransInMo']:
-        siambuilder = builder.Siamese_builder(config)
-        model = siambuilder.build()
-    else:
-        raise Exception('Not implemented model type!')
-
+    siambuilder = builder.Siamese_builder(config)
+    model = siambuilder.build()
     model = model.cuda()
-    logger.info(model)
-    if config.MODEL.NAME not in ['CNNInMo', 'TransInMo']:
-        model = loader.load_pretrain(model, './pretrain/{0}'.format(config.TRAIN.PRETRAIN), f2b=True, addhead=True)    # load pretrain
+    start_epoch = config.TRAIN.START_EPOCH
 
-    # resume or not
-    if config.TRAIN.RESUME:   # resume
-        model, optimizer, start_epoch, arch = loader.restore_from(model, optimizer, config.TRAIN.RESUME)
-    else:
-        start_epoch = config.TRAIN.START_EPOCH
-
-    # get optimizer
-    if not config.TRAIN.START_EPOCH == config.TRAIN.UNFIX_EPOCH and not config.MODEL.NAME in ['SiamDW', 'SiamFC']:
-        optimizer, lr_scheduler = learner.build_siamese_opt_lr(config, model, config.TRAIN.START_EPOCH)
-    else:
-        if config.MODEL.NAME in ['SiamDW', 'SiamFC']:
-            trainable_params = loader.check_trainable(model, logger, print=False)
-            optimizer, lr_scheduler = learner.build_simple_siamese_opt_lr(config, trainable_params)
-        else:
-            optimizer, lr_scheduler = learner.build_siamese_opt_lr(config, model, 0)  # resume wrong (last line)
+    # # get optimizer
+    # if not config.TRAIN.START_EPOCH == config.TRAIN.UNFIX_EPOCH and not config.MODEL.NAME in ['SiamDW', 'SiamFC']:
+    #     optimizer, lr_scheduler = learner.build_siamese_opt_lr(config, model, config.TRAIN.START_EPOCH)
+    # else:
+    #     if config.MODEL.NAME in ['SiamDW', 'SiamFC']:
+    #         trainable_params = loader.check_trainable(model, logger, print=False)
+    #         optimizer, lr_scheduler = learner.build_simple_siamese_opt_lr(config, trainable_params)
+    #     else:
+    optimizer, lr_scheduler = learner.build_siamese_opt_lr(config, model, 0)  # resume wrong (last line)
 
     # check trainable again
     print('==========check trainable parameters==========')
