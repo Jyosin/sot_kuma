@@ -106,8 +106,8 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
             print('==========double check trainable==========')
             loader.check_trainable(model, logger)  # print trainable params info
 
-            lr_scheduler.step(epoch)
-            curLR = lr_scheduler.get_cur_lr()
+        lr_scheduler.step(epoch)
+        curLR = lr_scheduler.get_cur_lr()
 
         inputs = {'data_loader': train_loader, 'model': model, 'optimizer': optimizer, 'device': device,
                   'epoch': epoch + 1, 'cur_lr': curLR, 'config': config,
@@ -120,6 +120,9 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
             loader.save_model(model, epoch, optimizer, config.MODEL.NAME, config, isbest=False)
         elif dist.get_rank() == 0:
             loader.save_model(model, epoch, optimizer, config.MODEL.NAME, config, isbest=False)
+        
+        # import pdb
+        #pdb.set_trace()
         
 
     writer_dict['writer'].close()
