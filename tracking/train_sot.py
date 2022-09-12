@@ -87,9 +87,6 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
     logger.info(lr_scheduler)
     logger.info('model prepare done')
 
-    if wandb_instance is not None:
-        wandb_instance.watch(model)
-
     for epoch in range(start_epoch, config.TRAIN.END_EPOCH):
         # build dataloader, benefit to tracking
         train_set = data_builder(config)
@@ -109,11 +106,6 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
             print('==========double check trainable==========')
             loader.check_trainable(model, logger)  # print trainable params info
 
-        if config.MODEL.NAME in ['SiamFC', 'SiamDW']:
-            curLR = lr_scheduler[epoch]
-            for param_group in optimizer.param_groups:
-                param_group['lr'] = curLR
-        else:
             lr_scheduler.step(epoch)
             curLR = lr_scheduler.get_cur_lr()
 
@@ -128,9 +120,6 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
             loader.save_model(model, epoch, optimizer, config.MODEL.NAME, config, isbest=False)
         elif dist.get_rank() == 0:
             loader.save_model(model, epoch, optimizer, config.MODEL.NAME, config, isbest=False)
-        
-        # import pdb
-        #pdb.set_trace()
         
 
     writer_dict['writer'].close()
