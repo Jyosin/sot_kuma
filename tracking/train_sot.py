@@ -6,7 +6,7 @@ from easydict import EasyDict as edict
 
 
 import utils_reduce.read_file as reader
-import utils.log_helper as recorder
+import utils_reduce.log_helper as recorder
 
 import utils.model_helper as loader
 import utils.lr_scheduler as learner

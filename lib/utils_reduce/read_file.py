@@ -1,8 +1,3 @@
-''' Details
-Author: Zhipeng Zhang (zpzhang1995@gmail.com)
-Function: read files with [.yaml] [.txt]
-Data: 2021.6.23
-'''
 import os
 import yaml
 import numpy as np
