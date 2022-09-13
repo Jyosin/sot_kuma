@@ -7,9 +7,9 @@ from easydict import EasyDict as edict
 
 import utils_reduce.read_file as reader
 import utils_reduce.log_helper as recorder
+import utils_reuced.model_helper as loader
+import utils_reduced.lr_scheduler as learner
 
-import utils.model_helper as loader
-import utils.lr_scheduler as learner
 import utils.sot_builder as builder
 
 from tensorboardX import SummaryWriter
@@ -65,12 +65,6 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
         train_loader = DataLoader(train_set, batch_size=config.TRAIN.BATCH * gpu_num, num_workers=config.TRAIN.WORKERS,
                                     pin_memory=True, sampler=None, drop_last=False)
 
-        # # check if it's time to train backbone
-        # if epoch == config.TRAIN.UNFIX_EPOCH:
-        #     logger.info('training backbone')
-        #     optimizer, lr_scheduler = learner.build_siamese_opt_lr(config, model.module, epoch)
-        #     print('==========double check trainable==========')
-        #     loader.check_trainable(model, logger)  # print trainable params info
 
         lr_scheduler.step(epoch)
         curLR = lr_scheduler.get_cur_lr()
