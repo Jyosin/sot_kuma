@@ -1,9 +1,3 @@
-''' Details
-Author: Zhipeng Zhang (zpzhang1995@gmail.com)
-Function: build sot models (siamese)
-Data: 2021.6.23
-'''
-
 import importlib
 import torch.nn as nn
 from lib.models.sot.siaminference import SiamInference
@@ -39,19 +33,10 @@ class Siamese_builder(nn.Module):
         return SiamInference(archs=inputs)
 
     def build_backbone(self, backbone_type):
-        # if 'ResNet50_cross' in backbone_type:
-        #     bk_module = importlib.import_module('models.backbone.ResNet_cross')
-        #     bk_func = getattr(bk_module, backbone_type)
-        #     backbone = bk_func(self_attn_plus=self.cfg.MODEL.BACKBONE.self_attn_plus, num_heads=self.cfg.MODEL.BACKBONE.num_heads, group=self.cfg.MODEL.BACKBONE.group)
-        # elif 'ResNet' in backbone_type:
         bk_module = importlib.import_module('models.backbone.ResNet')
         bk_func = getattr(bk_module, backbone_type)
         backbone = bk_func(used_layers=self.cfg.MODEL.BACKBONE.LAYER)
     
-
-        # else:
-        #     raise Exception('Not implemented backbone network!')
-
         return backbone
 
     def build_neck(self, neck_type):

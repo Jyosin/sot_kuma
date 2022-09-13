@@ -10,7 +10,7 @@ import utils_reduce.log_helper as recorder
 import utils_reduce.model_helper as loader
 import utils_reduce.lr_scheduler as learner
 
-import utils.sot_builder as builder
+import utils_reduce.sot_builder as builder
 
 from tensorboardX import SummaryWriter
 from torch.nn import DataParallel
