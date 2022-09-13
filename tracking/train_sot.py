@@ -5,8 +5,9 @@ import argparse
 from easydict import EasyDict as edict
 
 
-import utils.read_file as reader
+import utils_reduce.read_file as reader
 import utils.log_helper as recorder
+
 import utils.model_helper as loader
 import utils.lr_scheduler as learner
 import utils.sot_builder as builder
@@ -14,6 +15,7 @@ import utils.sot_builder as builder
 from tensorboardX import SummaryWriter
 from torch.nn import DataParallel
 from torch.utils.data import DataLoader
+
 from dataset.siamese_builder import SiameseDataset as data_builder
 from core.trainer.siamese_train import siamese_train as trainer
 
