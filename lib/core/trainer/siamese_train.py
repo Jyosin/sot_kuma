@@ -125,25 +125,6 @@ def siamese_train(inputs):
         writer.add_scalar('reg_loss', reg_loss, global_steps)
         writer_dict['train_global_steps'] = global_steps + 1
 
-        if wandb_instance is not None:
-            # save some input images for watching
-            # template_example_images.append(wandb_instance.Image(
-            #     template[0], caption="Epoch:{}, Iteration:{}".format(epoch, iter)))
-            #
-            # search_example_images.append(wandb_instance.Image(
-            #     search[0], caption="Epoch:{}, Iteration:{}".format(epoch, iter)))
-            #
-            wandb_instance.log({
-                # "Template-Examples": template_example_images,   # save
-                # "Search-Examples": search_example_images,   # save
-                "epoch": epoch,
-                "iter": iter,
-                "lr": cur_lr,
-                "Cla. Loss": cls_loss,
-                "Reg. Loss": reg_loss,
-                "loss": loss
-            })
-
 
     return model, writer_dict
 

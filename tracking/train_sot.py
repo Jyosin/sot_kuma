@@ -9,7 +9,6 @@ import utils_reduce.read_file as reader
 import utils_reduce.log_helper as recorder
 import utils_reduce.model_helper as loader
 import utils_reduce.lr_scheduler as learner
-
 import utils_reduce.sot_builder as builder
 
 from tensorboardX import SummaryWriter

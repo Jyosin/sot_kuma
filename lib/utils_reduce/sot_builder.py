@@ -52,8 +52,6 @@ class Siamese_builder(nn.Module):
     def build_head(self, head_type):
         head_module = importlib.import_module('models.sot.head')
         head_func = getattr(head_module, head_type)
-
-
         head = head_func(in_channels=self.cfg.MODEL.HEAD.IN_CHANNEL,
                         out_channels=self.cfg.MODEL.HEAD.IN_CHANNEL)
 
