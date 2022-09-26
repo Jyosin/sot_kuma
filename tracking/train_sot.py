@@ -64,7 +64,6 @@ def epoch_train(config, logger, writer_dict, wandb_instance=None, args=None):
         train_loader = DataLoader(train_set, batch_size=config.TRAIN.BATCH * gpu_num, num_workers=config.TRAIN.WORKERS,
                                     pin_memory=True, sampler=None, drop_last=False)
 
-
         lr_scheduler.step(epoch)
         curLR = lr_scheduler.get_cur_lr()
 
