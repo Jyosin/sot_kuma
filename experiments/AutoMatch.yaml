@@ -1,7 +1,7 @@
 COMMON:
   LOG_DIR: 'logs'   # log file
   CHECKPOINT_DIR: 'snapshot'   # checkpoint file
-  GPUS: '0,1'
+  GPUS: '0'
 
 MODEL:
   NAME: 'AutoMatch'
