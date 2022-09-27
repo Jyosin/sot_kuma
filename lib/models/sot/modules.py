@@ -11,186 +11,6 @@ from torchvision.ops import roi_align
 from typing import Dict, List, Optional
 from .match import *
 
-
-def xcorr_depthwise(x, kernel):
-    '''
-    depthwise cross correlation
-    SiamRPN++: https://arxiv.org/abs/1812.11703
-    '''
-
-    batch = kernel.size(0)
-    channel = kernel.size(1)
-    x = x.view(1, batch*channel, x.size(2), x.size(3))
-    kernel = kernel.view(batch*channel, 1, kernel.size(2), kernel.size(3))
-    out = F.conv2d(x, kernel, groups=batch*channel)
-    out = out.view(batch, channel, out.size(2), out.size(3))
-    return out
-
-
-# ---------------------------------------------------------------------------
-# Moduels in InMo [IJCAI2022]: https://arxiv.org/pdf/2201.02526.pdf
-# ---------------------------------------------------------------------------
-class MLP(nn.Module):
-    """ Very simple multi-layer perceptron (also called FFN)"""
-
-    def __init__(self, input_dim, hidden_dim, output_dim, num_layers):
-        super().__init__()
-        self.num_layers = num_layers
-        h = [hidden_dim] * (num_layers - 1)
-        self.layers = nn.ModuleList(nn.Linear(n, k) for n, k in zip([input_dim] + h, h + [output_dim]))
-
-    def forward(self, x):
-        for i, layer in enumerate(self.layers):
-            x = F.relu(layer(x)) if i < self.num_layers - 1 else layer(x)
-        return x
-
-
-# ---------------------------------------------------------------------------
-# Moduels in Ocean [ECCV2020]: https://arxiv.org/abs/2006.10721
-# ---------------------------------------------------------------------------
-
-class SingleDW(nn.Module):
-    '''
-    a simple depthwise cross correlation layer
-    '''
-    def __init__(self):
-        super(SingleDW, self).__init__()
-
-    def forward(self, z, x):
-
-        s = xcorr_depthwise(x, z)
-
-        return s
-
-
-class GroupDW(nn.Module):
-    '''
-    parallel depthwise cross correlation layers
-    Ocean: https://arxiv.org/abs/2006.10721
-    '''
-    def __init__(self):
-        super(GroupDW, self).__init__()
-        self.weight = nn.Parameter(torch.ones(3))
-
-    def forward(self, z, x):
-        z11, z12, z21 = z
-        x11, x12, x21 = x
-
-        re11 = xcorr_depthwise(x11, z11)
-        re12 = xcorr_depthwise(x12, z12)
-        re21 = xcorr_depthwise(x21, z21)
-        re = [re11, re12, re21]
-
-        # weight
-        weight = F.softmax(self.weight, 0)
-
-        s = 0
-        for i in range(3):
-            s += weight[i] * re[i]
-
-        return s
-
-
-class matrix(nn.Module):
-    """
-    parallel multidilation encoding
-    Ocean: https://arxiv.org/abs/2006.10721
-    """
-    def __init__(self, in_channels, out_channels):
-        super(matrix, self).__init__()
-
-        # same size (11)
-        self.matrix11_k = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=3, bias=False),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(inplace=True),
-        )
-        self.matrix11_s = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=3, bias=False),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(inplace=True),
-        )
-
-        # h/2, w
-        self.matrix12_k = nn.Sequential(
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, bias=False, dilation=(2, 1)),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(inplace=True),
-        )
-        self.matrix12_s = nn.Sequential(
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, bias=False, dilation=(2, 1)),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(inplace=True),
-        )
-
-        # w/2, h
-        self.matrix21_k = nn.Sequential(
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, bias=False, dilation=(1, 2)),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(inplace=True),
-        )
-        self.matrix21_s = nn.Sequential(
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, bias=False, dilation=(1, 2)),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU(inplace=True),
-        )
-
-    def forward(self, z, x):
-        z11 = self.matrix11_k(z)
-        x11 = self.matrix11_s(x)
-
-        z12 = self.matrix12_k(z)
-        x12 = self.matrix12_s(x)
-
-        z21 = self.matrix21_k(z)
-        x21 = self.matrix21_s(x)
-
-        return [z11, z12, z21], [x11, x12, x21]
-
-
-# class AdaptiveConv(nn.Module):
-#     """ Adaptive Conv is built based on Deformable Conv
-#     with precomputed offsets which derived from anchors"""
-#
-#     def __init__(self, in_channels, out_channels):
-#         super(AdaptiveConv, self).__init__()
-#         self.conv = DeformConv(in_channels, out_channels, 3, padding=1)
-#
-#     def forward(self, x, offset):
-#         N, _, H, W = x.shape
-#         assert offset is not None
-#         assert H * W == offset.shape[1]
-#         # reshape [N, NA, 18] to (N, 18, H, W)
-#         offset = offset.permute(0, 2, 1).reshape(N, -1, H, W)
-#         x = self.conv(x, offset)
-#
-#         return x
-
-
-# class AlignHead(nn.Module):
-#     """
-#     feature alignment module
-#     Ocean: https://arxiv.org/abs/2006.10721
-#     """
-#
-#     def __init__(self, in_channels, feat_channels):
-#         super(AlignHead, self).__init__()
-#
-#         self.rpn_conv = AdaptiveConv(in_channels, feat_channels)
-#         self.rpn_cls = nn.Conv2d(feat_channels, 1, 1)
-#         self.relu = nn.ReLU(inplace=True)
-#
-#     def forward(self, x, offset):
-#         x = self.relu(self.rpn_conv(x, offset))
-#         cls_score = self.rpn_cls(x)
-#         return cls_score
-
-
-# ---------------------------------------------------------------------------
-# Moduels in AutoMatch [ICCV2021]:
-# https://openaccess.thecvf.com/content/ICCV2021/papers/Zhang_Learn_To_Match_Automatic_Matching_Network_Design_for_Visual_Tracking_ICCV_2021_paper.pdf
-# ---------------------------------------------------------------------------
-
 class L2Mregression(nn.Module):
     """
     bounding box regression head in AutoMatch
@@ -302,8 +122,7 @@ class L2Mclassification(nn.Module):
         # use Conv3 in classification
         ts4, ts3 = target
         xfs3 = self.LTM(xfs3, zfs3, ts3, mask)
-        #import pdb
-        #pdb.set_trace()
+    
         if self.training:
             outputs = self.roi_cls(pred_box, xf, xfs3, ts4, ts3, cls_label=cls_label, jitterBox=jitterBox)
             return outputs
@@ -616,7 +435,6 @@ class roi_classification(nn.Module):
         return outputs
 
 
-
 class roi_template(nn.Module):
     """
     template roi pooling: get 1*1 template
@@ -727,7 +545,6 @@ class SimpleMatrix(nn.Module):
         x11 = self.matrix11_s(x)
 
         return z11, x11
-
 
 
 class LTM(nn.Module):
@@ -856,7 +673,6 @@ def nested_tensor_from_tensor_list(tensor_list: List[torch.Tensor]):
     else:
         raise ValueError('not supported')
     return NestedTensor(tensor, mask)
-
 
 class NestedTensor(object):
     def __init__(self, tensors, mask: Optional[torch.Tensor]):
