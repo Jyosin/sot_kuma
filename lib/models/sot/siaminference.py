@@ -1,9 +1,3 @@
-''' Details
-Author: Zhipeng Zhang (zpzhang1995@gmail.com)
-Function: general SOT pipeline, support SiamFC, SiamDW, Ocean, AutoMatch
-Data: 2021.6.23
-'''
-
 import torch
 import importlib
 import torch.nn as nn
@@ -20,7 +14,6 @@ class SiamInference(nn.Module):
         self.init_arch(archs)
         self.init_hyper()
         self.init_loss()
-        # self.last_predict = None
 
 
     def init_arch(self, inputs):
@@ -67,39 +60,31 @@ class SiamInference(nn.Module):
         zfs = self.backbone(template)
         xfs = self.backbone(search)
 
-        if self.cfg.MODEL.NAME in ['AutoMatch']:
-            zf_conv4, zf_conv3 = zfs['p3'], zfs['p2']
-            xf_conv4, xf_conv3 = xfs['p3'], xfs['p2']
-        else:
-            raise Exception('Not implemented model!')
+        zf_conv4, zf_conv3 = zfs['p3'], zfs['p2']
+        xf_conv4, xf_conv3 = xfs['p3'], xfs['p2']
+
 
         # neck
-        if self.neck is not None:
-            if self.cfg.MODEL.NAME in ['AutoMatch']:
-                zfs4, zfs3 = self.neck(zf_conv4, zf_conv3)
-                xfs4, xfs3 = self.neck(xf_conv4, xf_conv3)
+        zfs4, zfs3 = self.neck(zf_conv4, zf_conv3)
+        xfs4, xfs3 = self.neck(xf_conv4, xf_conv3)
 
         # head
         # not implement Ocean object-aware version, if you need, pls find it in researchmm/TracKit
-        if self.cfg.MODEL.NAME in ['AutoMatch']:
-            head_inputs = {'xf_conv4': xfs4, 'xf_conv3': xfs3, 'zf_conv4': zfs4, 'zf_conv3': zfs3, \
-                          'template_mask': inputs['template_mask'], 'target_box': inputs['template_bbox'],
-                           'jitterBox': inputs['jitterBox'], 'cls_label': inputs['cls_label']
-                           }
-            cls_preds, reg_preds = self.head(head_inputs)
 
+        head_inputs = {'xf_conv4': xfs4, 'xf_conv3': xfs3, 'zf_conv4': zfs4, 'zf_conv3': zfs3, \
+                        'template_mask': inputs['template_mask'], 'target_box': inputs['template_bbox'],
+                        'jitterBox': inputs['jitterBox'], 'cls_label': inputs['cls_label']
+                        }
+        cls_preds, reg_preds = self.head(head_inputs)
 
-        if self.cfg.MODEL.NAME in ['AutoMatch']:
-            cls_label, reg_label, reg_weight = inputs['cls_label'], inputs['reg_label'], inputs['reg_weight']
-            reg_pred = reg_preds['reg_score']
-            reg_loss = 2 * self.reg_loss(reg_pred, reg_label, reg_weight)
-            cls_pred_s1, cls_pred_s2 = cls_preds['cls_score_s1'], cls_preds['cls_score_s2']
-            cls_loss_s1 = self.cls_loss(cls_pred_s1, cls_label)
-            cls_loss_s2 = self.cls_loss_additional(cls_pred_s2, cls_preds['cls_label_s2'], cls_preds['cls_jitter'], inputs['jitter_ious'])
-            cls_loss = cls_loss_s1 + cls_loss_s2
-            loss = {'cls_loss': cls_loss, 'reg_loss': reg_loss}
-        else:
-            raise Exception('not supported model')
+        cls_label, reg_label, reg_weight = inputs['cls_label'], inputs['reg_label'], inputs['reg_weight']
+        reg_pred = reg_preds['reg_score']
+        reg_loss = 2 * self.reg_loss(reg_pred, reg_label, reg_weight)
+        cls_pred_s1, cls_pred_s2 = cls_preds['cls_score_s1'], cls_preds['cls_score_s2']
+        cls_loss_s1 = self.cls_loss(cls_pred_s1, cls_label)
+        cls_loss_s2 = self.cls_loss_additional(cls_pred_s2, cls_preds['cls_label_s2'], cls_preds['cls_jitter'], inputs['jitter_ious'])
+        cls_loss = cls_loss_s1 + cls_loss_s2
+        loss = {'cls_loss': cls_loss, 'reg_loss': reg_loss}
 
         return loss
 
@@ -116,17 +101,9 @@ class SiamInference(nn.Module):
 
         zfs = self.backbone(template)
 
+        zf_conv4, zf_conv3 = zfs['p3'], zfs['p2']
 
-        if self.cfg.MODEL.NAME in ['AutoMatch']:
-            zf_conv4, zf_conv3 = zfs['p3'], zfs['p2']
-        else:
-            raise Exception('Not implemented model!')
-
-        if self.neck is not None:
-            if self.cfg.MODEL.NAME in ['AutoMatch']:
-                self.zfs4, self.zfs3 = self.neck(zf_conv4, zf_conv3)
-        else:
-            self.zf = zf
+        self.zfs4, self.zfs3 = self.neck(zf_conv4, zf_conv3)
 
         if 'template_mask' in inputs.keys():
             self.template_mask = inputs['template_mask'].float()
@@ -135,46 +112,32 @@ class SiamInference(nn.Module):
             self.target_box = torch.tensor(inputs['target_box'], dtype=torch.float32).to(self.zfs3.device)
             self.target_box = self.target_box.view(1, 4)
 
-        if self.cfg.MODEL.NAME in ['OceanPlus']:  # update template
-            self.MA_kernel = self.zf.detach()
-            self.zf_update = None
-
     def track(self, inputs):
         """
         inputs:
          - search: BCHW, H*W:255*255
         """
-        # import pdb
-        # pdb.set_trace()
 
         search = inputs['search']
         xfs = self.backbone(search)
 
-        if self.cfg.MODEL.NAME in ['AutoMatch']:
-            xf_conv4, xf_conv3 = xfs['p3'], xfs['p2']
-        else:
-            raise Exception('Not implemented model!')
+        xf_conv4, xf_conv3 = xfs['p3'], xfs['p2']
 
         if self.neck is not None:
-            if self.cfg.MODEL.NAME in ['AutoMatch']:
-                xfs4, xfs3 = self.neck(xf_conv4, xf_conv3)
-                head_inputs = {'xf_conv4': xfs4, 'xf_conv3': xfs3, 'zf_conv4': self.zfs4, 'zf_conv3': self.zfs3, \
-                                'template_mask': self.template_mask, 'target_box': self.target_box, }
-                # pdb.set_trace()
-                cls_preds, reg_preds = self.head(head_inputs)
-                preds = {
-                    'cls_s1': cls_preds['cls_score_s1'],
-                    'cls_s2': cls_preds['cls_score_s2'],
-                    'reg': reg_preds['reg_score'] # clip large regression pred
-                }
+            xfs4, xfs3 = self.neck(xf_conv4, xf_conv3)
+            head_inputs = {'xf_conv4': xfs4, 'xf_conv3': xfs3, 'zf_conv4': self.zfs4, 'zf_conv3': self.zfs3, \
+                            'template_mask': self.template_mask, 'target_box': self.target_box, }
+            # pdb.set_trace()
+            cls_preds, reg_preds = self.head(head_inputs)
+            preds = {
+                'cls_s1': cls_preds['cls_score_s1'],
+                'cls_s2': cls_preds['cls_score_s2'],
+                'reg': reg_preds['reg_score'] # clip large regression pred
+            }
 
-                # record some feats for zoom
-                self.record = [cls_preds['xf_conv4'].detach(), cls_preds['xf_conv3'].detach(),
-                               cls_preds['zf_conv4'].detach(), cls_preds['zf_conv3'].detach()]  # [xf_conv4, xf_conv3, zf_conv4, zf_conv3]
-            else:
-                xf_neck = self.neck(xf, crop=False)
-                xf = xf_neck['ori']
-                preds = self.head(xf, self.zf)
+            # record some feats for zoom
+            self.record = [cls_preds['xf_conv4'].detach(), cls_preds['xf_conv3'].detach(),
+                            cls_preds['zf_conv4'].detach(), cls_preds['zf_conv3'].detach()]  # [xf_conv4, xf_conv3, zf_conv4, zf_conv3]
 
         else:
             preds = self.head(xf, self.zf)
