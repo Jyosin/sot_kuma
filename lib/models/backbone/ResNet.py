@@ -7,7 +7,7 @@ Data: 2021.6.23
 import math
 import torch.nn as nn
 
-from models.backbone.modules import Bottleneck, Bottleneck_BIG_CI
+from models.backbone.modules import Bottleneck
 
 
 class ResNet50Dilated(nn.Module):

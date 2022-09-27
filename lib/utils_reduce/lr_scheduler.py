@@ -68,66 +68,6 @@ class StepScheduler(LRScheduler):
         super(StepScheduler, self).__init__(optimizer, last_epoch)
 
 
-class MultiStepScheduler(LRScheduler):
-    '''
-    learning rate in step decreasing
-    '''
-    def __init__(self, optimizer, start_lr=0.01, end_lr=None,
-                 steps=[10, 20, 30, 40], mult=0.5, epochs=50,
-                 last_epoch=-1, **kwargs):
-        if end_lr is not None:
-            if start_lr is None:
-                start_lr = end_lr / (mult ** (len(steps)))
-            else:
-                mult = math.pow(end_lr/start_lr, 1. / len(steps))
-        self.start_lr = start_lr
-        self.lr_spaces = self._build_lr(start_lr, steps, mult, epochs)
-        self.mult = mult
-        self.steps = steps
-
-        super(MultiStepScheduler, self).__init__(optimizer, last_epoch)
-
-    def _build_lr(self, start_lr, steps, mult, epochs):
-        lr = [0] * epochs
-        lr[0] = start_lr
-        for i in range(1, epochs):
-            lr[i] = lr[i-1]
-            if i in steps:
-                lr[i] *= mult
-        return np.array(lr, dtype=np.float32)
-
-
-class LinearStepScheduler(LRScheduler):
-    '''
-    learning rate in step decreasing
-    '''
-    def __init__(self, optimizer, start_lr=0.01, end_lr=0.005,
-                 epochs=50, last_epoch=-1, **kwargs):
-        self.start_lr = start_lr
-        self.end_lr = end_lr
-        self.lr_spaces = np.linspace(start_lr, end_lr, epochs)
-        super(LinearStepScheduler, self).__init__(optimizer, last_epoch)
-
-
-class CosStepScheduler(LRScheduler):
-    '''
-    learning rate in cosine
-    '''
-    def __init__(self, optimizer, start_lr=0.01, end_lr=0.005,
-                 epochs=50, last_epoch=-1, **kwargs):
-        self.start_lr = start_lr
-        self.end_lr = end_lr
-        self.lr_spaces = self._build_lr(start_lr, end_lr, epochs)
-
-        super(CosStepScheduler, self).__init__(optimizer, last_epoch)
-
-    def _build_lr(self, start_lr, end_lr, epochs):
-        index = np.arange(epochs).astype(np.float32)
-        lr = end_lr + (start_lr - end_lr) * \
-            (1. + np.cos(index * np.pi / epochs)) * 0.5
-        return lr.astype(np.float32)
-
-
 class WarmUPScheduler(LRScheduler):
     '''
     warmup strategy
@@ -140,13 +80,9 @@ class WarmUPScheduler(LRScheduler):
 
         super(WarmUPScheduler, self).__init__(optimizer, last_epoch)
 
-
 LRs = {
     'log': LogScheduler,
-    'step': StepScheduler,
-    'multi-step': MultiStepScheduler,
-    'linear': LinearStepScheduler,
-    'cos': CosStepScheduler}
+    'step': StepScheduler,}
 
 
 def _build_lr_scheduler(optimizer, config, epochs=50, last_epoch=-1):
@@ -211,28 +147,10 @@ def build_siamese_opt_lr(cfg, model, current_epoch=0):
     trainable_params += [{'params': model.head.parameters(),
                           'lr': cfg.TRAIN.BASE_LR}]
 
-    if cfg.MODEL.NAME == 'TransInMo':
-        optimizer = torch.optim.AdamW(trainable_params, weight_decay=cfg.TRAIN.WEIGHT_DECAY)
-        # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 200, gamma=0.316)
-    else:
-        optimizer = torch.optim.SGD(trainable_params,
-                                    momentum=cfg.TRAIN.MOMENTUM,
-                                    weight_decay=cfg.TRAIN.WEIGHT_DECAY)
+    optimizer = torch.optim.SGD(trainable_params,
+                                momentum=cfg.TRAIN.MOMENTUM,
+                                weight_decay=cfg.TRAIN.WEIGHT_DECAY)
 
     lr_scheduler = build_lr_scheduler(optimizer, cfg, epochs=cfg.TRAIN.END_EPOCH)
     lr_scheduler.step(cfg.TRAIN.START_EPOCH)
     return optimizer, lr_scheduler
-
-
-# def build_simple_siamese_opt_lr(cfg, trainable_params):
-#     '''
-#     simple learning rate scheduel, used in SiamFC and SiamDW
-#     '''
-#     optimizer = torch.optim.SGD(trainable_params, cfg.TRAIN.LR,
-#                                 momentum=cfg.TRAIN.MOMENTUM,
-#                                 weight_decay=cfg.TRAIN.WEIGHT_DECAY)
-
-#     lr_scheduler = np.logspace(math.log10(cfg.TRAIN.LR), math.log10(cfg.TRAIN.LR_END),
-#                             cfg.TRAIN.END_EPOCH)
-
-#     return optimizer, lr_scheduler
