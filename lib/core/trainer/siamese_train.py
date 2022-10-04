@@ -26,8 +26,8 @@ def siamese_train(inputs):
     cls_losses = recorder.AverageMeter()
     reg_losses = recorder.AverageMeter()
     end = time.time()
-    template_example_images = []   # for wandb record input images
-    search_example_images = []   # for wandb record input images
+    # template_example_images = []   # for wandb record input images
+    # search_example_images = []   # for wandb record input images
 
     # switch to train mode
     model.train()
@@ -43,11 +43,18 @@ def siamese_train(inputs):
         cls_label = batchinfo['cls_label'].type(torch.FloatTensor).to(device)
 
         # Ocean
-        reg_label = batchinfo['reg_label'].float().to(device) if 'reg_label' in batch_keys else None
-        reg_weight = batchinfo['reg_weight'].float().to(device) if 'reg_weight' in batch_keys else None
+        # reg_label = batchinfo['reg_label'].float().to(device) if 'reg_label' in batch_keys else None
+        # reg_weight = batchinfo['reg_weight'].float().to(device) if 'reg_weight' in batch_keys else None
+        
+        reg_label = batchinfo['reg_label'].float().to(device)
+        reg_weight = batchinfo['reg_weight'].float().to(device)
+        
+        # reg_label = None
+        # reg_weight = None
 
         # OceanPlus
-        template_mask = batchinfo['template_mask'].to(device) if 'template_mask' in batch_keys else None
+        # template_mask = batchinfo['template_mask'].to(device) if 'template_mask' in batch_keys else None
+        template_mask =  None
 
         # AUtoMatch
         template_bbox = batchinfo['template_bbox'].to(device) if 'template_bbox' in batch_keys else None
@@ -60,24 +67,11 @@ def siamese_train(inputs):
                         'template_mask': template_mask, 'jitterBox': jitterBox, 'jitter_ious': jitter_ious}
         
         model_loss = model(model_inputs)
-        cls_loss = torch.mean(model_loss['cls_loss'])
-        # reg_loss = torch.mean(model_loss['reg_loss']) if 'reg_loss' in model_loss.keys() else None
-        if cfg.MODEL.NAME in ['TransInMo']:
-            reg_loss = model_loss['reg_loss']
-            reg_loss['loss_l1'] = torch.mean(reg_loss['loss_l1'])
-            reg_loss['loss_iou'] = torch.mean(reg_loss['loss_iou'])
-        else:
-            reg_loss = torch.mean(model_loss['reg_loss']) if 'reg_loss' in model_loss.keys() else None
 
-        if cfg.MODEL.NAME in ['TransInMo']:
-            loss = cfg.TRAIN.CLS_WEIGHT * cls_loss + cfg.TRAIN.REG_WEIGHT_L1 * reg_loss[
-                'loss_l1'] + cfg.TRAIN.REG_WEIGHT_IOU * reg_loss['loss_iou']
-        elif cfg.MODEL.NAME in ['CNNInMo']:
-            cen_loss = torch.mean(model_loss['cen_loss'])
-            loss = cfg.TRAIN.CLS_WEIGHT * cls_loss + \
-                cfg.TRAIN.REG_WEIGHT * reg_loss + cfg.TRAIN.CEN_WEIGHT * cen_loss
-        else:
-            loss = cfg.TRAIN.CLS_WEIGHT * cls_loss + cfg.TRAIN.REG_WEIGHT * reg_loss if reg_loss is not None else cls_loss
+        cls_loss = torch.mean(model_loss['cls_loss'])
+        reg_loss = torch.mean(model_loss['reg_loss']) if 'reg_loss' in model_loss.keys() else None
+        loss = cfg.TRAIN.CLS_WEIGHT * cls_loss + cfg.TRAIN.REG_WEIGHT * reg_loss if reg_loss is not None else cls_loss
+        
         loss = torch.mean(loss)
 
         # compute gradient and do update step

@@ -91,31 +91,12 @@ TRAIN:
         CUTOUT: 0
         NEG: 0.2
     CONFIG:
-      VID:
-        PATH: './data/vid/crop511'
-        ANNOTATION: './data/vid/train.json'
-        RANGE: 100
-        USE: 100000
-      YTB:
-        PATH: './data/y2b/crop511'
-        ANNOTATION: './data/y2b/train.json'
-        RANGE: 3
-        USE: 200000
       GOT10K:
         PATH: './data/got10k/crop511'
         ANNOTATION: './data/got10k/all.json'
         RANGE: 100
         USE: 200000
-      DET:
-        PATH: './data/det/crop511'
-        ANNOTATION: './data/det/train.json'
-        RANGE: 100
-        USE: 50000
-      COCO:
-        PATH: "./data/coco/crop511"
-        ANNOTATION: "./data/coco/train2017.json"
-        RANGE: 1
-        USE: 50000
+
       KUMA:
         PATH: "./data/kuma/crop511"
         ANNOTATION: "./data/kuma/all.json"
@@ -132,66 +113,13 @@ TEST:    # TEST model is same as TRAIN.MODEL
   EPOCH_TEST: True   # use default hyper-parameters
   RESUME: None   # if not false, ignore start and end epochs
   HYPERS:
-    OTB2015:
-      penalty_k: 0.147
-      lr: 0.699
-      window_influence: 0.55
-      small_sz: 255
-      big_sz: 287
-    VOT2019:
-      penalty_k: 0.143
-      lr: 0.803
-      window_influence: 0.5
-      small_sz: 255
-      big_sz: 255
     GOT10KTEST:
       penalty_k: 0.049
       lr: 1
       window_influence: 0.34
       small_sz: 255
       big_sz: 255
-    LASOTTEST:
-      penalty_k: 0.049
-      lr: 1
-      window_influence: 0.38
-      small_sz: 255
-      big_sz: 255
-    TNL2K:
-      penalty_k: 0.049
-      lr: 1
-      window_influence: 0.4
-      small_sz: 255
-      big_sz: 255
-    TOTB:
-      penalty_k: 0.103
-      lr: 0.82
-      window_influence: 0.56
-      small_sz: 255
-      big_sz: 255
-    NFS30:
-      penalty_k: 0.015
-      lr: 0.944
-      window_influence: 0.2
-      small_sz: 255
-      big_sz: 255
-    TC128:
-      penalty_k: 0.063
-      lr: 0.519
-      window_influence: 0.4
-      small_sz: 255
-      big_sz: 255
-    UAV123:
-      penalty_k: 0.128
-      lr: 0.913
-      window_influence: 0.41
-      small_sz: 255
-      big_sz: 271
-    TRACKINGNET:
-      penalty_k: 0.049
-      lr: 1
-      window_influence: 0.34
-      small_sz: 255
-      big_sz: 255
+
     KUMA:
       penalty_k: 0.143
       lr: 0.803

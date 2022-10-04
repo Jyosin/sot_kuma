@@ -644,24 +644,3 @@ class subData(object):
 
         return self._get_image_anno(video_name, track, frame)
 
-
-if __name__ == '__main__':
-    import os
-    from torch.utils.data import DataLoader
-    import utils.read_file as reader
-    config = reader.load_yaml('experiment/Ocean.yaml')
-
-    train_set = SiameseDataset(config)
-    train_loader = DataLoader(train_set, batch_size=16, num_workers=1, pin_memory=False)
-
-    for iter, input in enumerate(train_loader):
-        # label_cls = input[2].numpy()  # BCE need float
-        template = input[0]
-        search = input[1]
-        print(template.size())
-        print(search.size())
-
-        print('dataset test')
-
-    print()
-
